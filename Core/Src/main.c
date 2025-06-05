@@ -42,7 +42,7 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-
+int test_num = 0;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -58,6 +58,11 @@ int test()
 {
 	time_value += 20;
 	return time_value;
+}
+
+void test2(int a)
+{
+	GPIOE->BSRR = seg_number[a];
 }
 /* USER CODE END 0 */
 

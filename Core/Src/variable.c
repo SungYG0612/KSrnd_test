@@ -1,3 +1,5 @@
 #include "variable.h"
 
 int time_value = 0;
+
+uint32_t seg_number[10]={0x003f00c0,0x000600f9,0x005b00a4,0x004f00b0,0x00660099,0x006d0092,0x007d0082,0x002700d8,0x007f0080,0x006f0090};
