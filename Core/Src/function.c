@@ -1,4 +1,6 @@
+#include "main.h"
 #include "function.h"
+#include "variable.h"
 
 void toggle()
 {

@@ -20,6 +20,7 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "stm32l0xx_it.h"
+#include "function.h"
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 /* USER CODE END Includes */
@@ -57,7 +58,7 @@
 /* External variables --------------------------------------------------------*/
 
 /* USER CODE BEGIN EV */
-int time_value = 0;
+
 /* USER CODE END EV */
 
 /******************************************************************************/
@@ -125,12 +126,7 @@ void PendSV_Handler(void)
 void SysTick_Handler(void)
 {
   /* USER CODE BEGIN SysTick_IRQn 0 */
-	if(time_value >= 500)
-	{
-		HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin);
-		time_value = 0;
-	}
-	time_value += 1;
+	toggle();
   /* USER CODE END SysTick_IRQn 0 */
 	HAL_IncTick();
   /* USER CODE BEGIN SysTick_IRQn 1 */

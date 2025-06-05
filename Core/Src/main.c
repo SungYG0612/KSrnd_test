@@ -53,16 +53,7 @@ static void MX_GPIO_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-int test()
-{
-	time_value += 20;
-	return time_value;
-}
 
-void test2(int a)
-{
-	GPIOE->BSRR = seg_number[a];
-}
 /* USER CODE END 0 */
 
 /**
