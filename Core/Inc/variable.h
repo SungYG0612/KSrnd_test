@@ -1,1 +1,1 @@
-int time_value = 0;
+extern int time_value;
