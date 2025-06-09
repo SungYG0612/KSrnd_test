@@ -41,7 +41,7 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-
+extern int flag;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -93,6 +93,11 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+	  if(flag & 0x00000001)
+	  {
+		  HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin);
+		  flag ^= 0x00000001;
+	  }
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
