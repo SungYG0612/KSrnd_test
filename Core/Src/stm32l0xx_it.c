@@ -127,8 +127,18 @@ void SysTick_Handler(void)
   /* USER CODE BEGIN SysTick_IRQn 0 */
 	if (time_value >= 500)
 	{
-		flag++;
-		flag %= 10;
+		if(flag==0x0000)
+		{
+			flag |= 0x0001;
+		}
+		else if(flag == 0x0100)
+		{
+			flag &= 0x0000;
+		}
+		else
+		{
+			flag<<=1;
+		}
 		time_value = 0;
 	}
 	time_value ++;

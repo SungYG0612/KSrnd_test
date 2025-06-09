@@ -42,7 +42,7 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-int flag=0;
+int16_t flag=0x0000;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -59,34 +59,34 @@ void number_sel(int sel)
 	HAL_GPIO_WritePin(GPIOE, A_Pin|B_Pin|C_Pin|D_Pin|E_Pin|F_Pin|G_Pin|DP_Pin , 0);
 	switch(sel)
 	{
-	case 0:
+	case 0x0000:
 		HAL_GPIO_WritePin(GPIOE, A_Pin|B_Pin|C_Pin|D_Pin|E_Pin|F_Pin, 1);
 		break;
-	case 1:
+	case 0x0001:
 		HAL_GPIO_WritePin(GPIOE, B_Pin|C_Pin, 1);
 		break;
-	case 2:
+	case 0x0002:
 		HAL_GPIO_WritePin(GPIOE, A_Pin|B_Pin|D_Pin|E_Pin|G_Pin, 1);
 		break;
-	case 3:
+	case 0x0004:
 		HAL_GPIO_WritePin(GPIOE, A_Pin|B_Pin|C_Pin|D_Pin|G_Pin, 1);
 		break;
-	case 4:
+	case 0x0008:
 		HAL_GPIO_WritePin(GPIOE, B_Pin|C_Pin|F_Pin|G_Pin, 1);
 		break;
-	case 5:
+	case 0x0010:
 		HAL_GPIO_WritePin(GPIOE, A_Pin|C_Pin|D_Pin|F_Pin|G_Pin, 1);
 		break;
-	case 6:
+	case 0x0020:
 		HAL_GPIO_WritePin(GPIOE, A_Pin|C_Pin|D_Pin|E_Pin|F_Pin|G_Pin, 1);
 		break;
-	case 7:
+	case 0x0040:
 		HAL_GPIO_WritePin(GPIOE, A_Pin|B_Pin|C_Pin, 1);
 		break;
-	case 8:
+	case 0x0080:
 		HAL_GPIO_WritePin(GPIOE, A_Pin|B_Pin|C_Pin|D_Pin|E_Pin|F_Pin|G_Pin , 1);
 		break;
-	case 9:
+	case 0x0100:
 		HAL_GPIO_WritePin(GPIOE, A_Pin|B_Pin|C_Pin|D_Pin|F_Pin|G_Pin , 1);
 		break;
 	}
