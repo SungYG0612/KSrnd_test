@@ -41,7 +41,7 @@
 
 /* Private variables ---------------------------------------------------------*/
 /* USER CODE BEGIN PV */
-
+int time_value = 0;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -57,8 +57,7 @@
 /* External variables --------------------------------------------------------*/
 
 /* USER CODE BEGIN EV */
-int time_value = 0;
-uint8_t flag = 0x00000000;
+extern int flag;
 /* USER CODE END EV */
 
 /******************************************************************************/
@@ -126,12 +125,12 @@ void PendSV_Handler(void)
 void SysTick_Handler(void)
 {
   /* USER CODE BEGIN SysTick_IRQn 0 */
-	if(time_value>=500)
+	if(time_value>=0)
 	{
-		flag |= 0x00000001;
+		flag = 1;
 		time_value = 0;
 	}
-	time_value ++;
+	time_value++;
   /* USER CODE END SysTick_IRQn 0 */
   HAL_IncTick();
   /* USER CODE BEGIN SysTick_IRQn 1 */
