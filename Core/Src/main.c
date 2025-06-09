@@ -94,9 +94,7 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-	  if(flag>=4) {flag = 0;}
-
-	  switch(flag)
+	  switch(flag %= 4)
 	  {
 	  case 0:
 		  HAL_GPIO_WritePin(G_GPIO_Port, G_Pin, SET);
