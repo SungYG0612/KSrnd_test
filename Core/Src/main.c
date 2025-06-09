@@ -94,6 +94,8 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+	  if(flag>=4) {flag = 0;}
+
 	  switch(flag)
 	  {
 	  case 0:
