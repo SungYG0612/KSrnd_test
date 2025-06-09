@@ -512,20 +512,20 @@ static void MX_GPIO_Init(void)
                           |F_Pin|B_Pin|A_Pin|G_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, GPIO_PIN_SET);
  80003b0:	2380      	movs	r3, #128	@ 0x80
  80003b2:	011b      	lsls	r3, r3, #4
  80003b4:	4834      	ldr	r0, [pc, #208]	@ (8000488 <MX_GPIO_Init+0x174>)
- 80003b6:	2200      	movs	r2, #0
+ 80003b6:	2201      	movs	r2, #1
  80003b8:	0019      	movs	r1, r3
  80003ba:	f000 fc19 	bl	8000bf0 <HAL_GPIO_WritePin>
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOB, S1_Pin|S2_Pin|S3_Pin|S4_Pin, GPIO_PIN_SET);
+  HAL_GPIO_WritePin(GPIOB, S1_Pin|S2_Pin|S3_Pin|S4_Pin, GPIO_PIN_RESET);
  80003be:	23f0      	movs	r3, #240	@ 0xf0
  80003c0:	021b      	lsls	r3, r3, #8
  80003c2:	4831      	ldr	r0, [pc, #196]	@ (8000488 <MX_GPIO_Init+0x174>)
- 80003c4:	2201      	movs	r2, #1
+ 80003c4:	2200      	movs	r2, #0
  80003c6:	0019      	movs	r1, r3
  80003c8:	f000 fc12 	bl	8000bf0 <HAL_GPIO_WritePin>
 
@@ -689,23 +689,23 @@ void GPIOWrite(int sel)
  80004ba:	687b      	ldr	r3, [r7, #4]
  80004bc:	2b01      	cmp	r3, #1
  80004be:	d01d      	beq.n	80004fc <GPIOWrite+0x6c>
-		HAL_GPIO_WritePin(B_GPIO_Port, B_Pin, RESET);
+		HAL_GPIO_WritePin(G_GPIO_Port, G_Pin, RESET);
 		HAL_GPIO_WritePin(E_GPIO_Port, E_Pin, RESET);
 		HAL_GPIO_WritePin(D_GPIO_Port, D_Pin, SET);
 		break;
 	}
 }
  80004c0:	e073      	b.n	80005aa <GPIOWrite+0x11a>
-		HAL_GPIO_WritePin(G_GPIO_Port, G_Pin, SET);
+		HAL_GPIO_WritePin(B_GPIO_Port, B_Pin, SET);
  80004c2:	2380      	movs	r3, #128	@ 0x80
- 80004c4:	021b      	lsls	r3, r3, #8
+ 80004c4:	019b      	lsls	r3, r3, #6
  80004c6:	483b      	ldr	r0, [pc, #236]	@ (80005b4 <GPIOWrite+0x124>)
  80004c8:	2201      	movs	r2, #1
  80004ca:	0019      	movs	r1, r3
  80004cc:	f000 fb90 	bl	8000bf0 <HAL_GPIO_WritePin>
-		HAL_GPIO_WritePin(B_GPIO_Port, B_Pin, RESET);
+		HAL_GPIO_WritePin(G_GPIO_Port, G_Pin, RESET);
  80004d0:	2380      	movs	r3, #128	@ 0x80
- 80004d2:	019b      	lsls	r3, r3, #6
+ 80004d2:	021b      	lsls	r3, r3, #8
  80004d4:	4837      	ldr	r0, [pc, #220]	@ (80005b4 <GPIOWrite+0x124>)
  80004d6:	2200      	movs	r2, #0
  80004d8:	0019      	movs	r1, r3
@@ -726,16 +726,16 @@ void GPIOWrite(int sel)
  80004f6:	f000 fb7b 	bl	8000bf0 <HAL_GPIO_WritePin>
 		break;
  80004fa:	e056      	b.n	80005aa <GPIOWrite+0x11a>
-		HAL_GPIO_WritePin(G_GPIO_Port, G_Pin, RESET);
+		HAL_GPIO_WritePin(B_GPIO_Port, B_Pin, RESET);
  80004fc:	2380      	movs	r3, #128	@ 0x80
- 80004fe:	021b      	lsls	r3, r3, #8
+ 80004fe:	019b      	lsls	r3, r3, #6
  8000500:	482c      	ldr	r0, [pc, #176]	@ (80005b4 <GPIOWrite+0x124>)
  8000502:	2200      	movs	r2, #0
  8000504:	0019      	movs	r1, r3
  8000506:	f000 fb73 	bl	8000bf0 <HAL_GPIO_WritePin>
-		HAL_GPIO_WritePin(B_GPIO_Port, B_Pin, SET);
+		HAL_GPIO_WritePin(G_GPIO_Port, G_Pin, SET);
  800050a:	2380      	movs	r3, #128	@ 0x80
- 800050c:	019b      	lsls	r3, r3, #6
+ 800050c:	021b      	lsls	r3, r3, #8
  800050e:	4829      	ldr	r0, [pc, #164]	@ (80005b4 <GPIOWrite+0x124>)
  8000510:	2201      	movs	r2, #1
  8000512:	0019      	movs	r1, r3
@@ -756,16 +756,16 @@ void GPIOWrite(int sel)
  8000530:	f000 fb5e 	bl	8000bf0 <HAL_GPIO_WritePin>
 		break;
  8000534:	e039      	b.n	80005aa <GPIOWrite+0x11a>
-		HAL_GPIO_WritePin(G_GPIO_Port, G_Pin, RESET);
+		HAL_GPIO_WritePin(B_GPIO_Port, B_Pin, RESET);
  8000536:	2380      	movs	r3, #128	@ 0x80
- 8000538:	021b      	lsls	r3, r3, #8
+ 8000538:	019b      	lsls	r3, r3, #6
  800053a:	481e      	ldr	r0, [pc, #120]	@ (80005b4 <GPIOWrite+0x124>)
  800053c:	2200      	movs	r2, #0
  800053e:	0019      	movs	r1, r3
  8000540:	f000 fb56 	bl	8000bf0 <HAL_GPIO_WritePin>
-		HAL_GPIO_WritePin(B_GPIO_Port, B_Pin, RESET);
+		HAL_GPIO_WritePin(G_GPIO_Port, G_Pin, RESET);
  8000544:	2380      	movs	r3, #128	@ 0x80
- 8000546:	019b      	lsls	r3, r3, #6
+ 8000546:	021b      	lsls	r3, r3, #8
  8000548:	481a      	ldr	r0, [pc, #104]	@ (80005b4 <GPIOWrite+0x124>)
  800054a:	2200      	movs	r2, #0
  800054c:	0019      	movs	r1, r3
@@ -786,16 +786,16 @@ void GPIOWrite(int sel)
  800056a:	f000 fb41 	bl	8000bf0 <HAL_GPIO_WritePin>
 		break;
  800056e:	e01c      	b.n	80005aa <GPIOWrite+0x11a>
-		HAL_GPIO_WritePin(G_GPIO_Port, G_Pin, RESET);
+		HAL_GPIO_WritePin(B_GPIO_Port, B_Pin, RESET);
  8000570:	2380      	movs	r3, #128	@ 0x80
- 8000572:	021b      	lsls	r3, r3, #8
+ 8000572:	019b      	lsls	r3, r3, #6
  8000574:	480f      	ldr	r0, [pc, #60]	@ (80005b4 <GPIOWrite+0x124>)
  8000576:	2200      	movs	r2, #0
  8000578:	0019      	movs	r1, r3
  800057a:	f000 fb39 	bl	8000bf0 <HAL_GPIO_WritePin>
-		HAL_GPIO_WritePin(B_GPIO_Port, B_Pin, RESET);
+		HAL_GPIO_WritePin(G_GPIO_Port, G_Pin, RESET);
  800057e:	2380      	movs	r3, #128	@ 0x80
- 8000580:	019b      	lsls	r3, r3, #6
+ 8000580:	021b      	lsls	r3, r3, #8
  8000582:	480c      	ldr	r0, [pc, #48]	@ (80005b4 <GPIOWrite+0x124>)
  8000584:	2200      	movs	r2, #0
  8000586:	0019      	movs	r1, r3
