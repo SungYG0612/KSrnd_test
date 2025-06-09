@@ -43,7 +43,6 @@
 
 /* USER CODE BEGIN PV */
 int flag=0;
-uint32_t number[10]={0x003f00c0,0x000600f9,0x005b00a4,0x004f00b0,0x00660099,0x006d0092,0x007d0082,0x002700d8,0x007f0080,0x006f0090};
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -57,7 +56,79 @@ void number_sel(int);
 /* USER CODE BEGIN 0 */
 void number_sel(int sel)
 {
-	GPIOE->BSRR = number[sel];
+	HAL_GPIO_WritePin(GPIOE, A_Pin|B_Pin|C_Pin|D_Pin|E_Pin|F_Pin|G_Pin|DP_Pin , 0);
+	switch(sel)
+	{
+	case 0:
+		HAL_GPIO_WritePin(GPIOE, A_Pin, 1);
+		HAL_GPIO_WritePin(GPIOE, B_Pin, 1);
+		HAL_GPIO_WritePin(GPIOE, C_Pin, 1);
+		HAL_GPIO_WritePin(GPIOE, D_Pin, 1);
+		HAL_GPIO_WritePin(GPIOE, E_Pin, 1);
+		HAL_GPIO_WritePin(GPIOE, F_Pin, 1);
+		break;
+	case 1:
+		HAL_GPIO_WritePin(GPIOE, B_Pin, 1);
+		HAL_GPIO_WritePin(GPIOE, C_Pin, 1);
+		break;
+	case 2:
+		HAL_GPIO_WritePin(GPIOE, A_Pin, 1);
+		HAL_GPIO_WritePin(GPIOE, B_Pin, 1);
+		HAL_GPIO_WritePin(GPIOE, D_Pin, 1);
+		HAL_GPIO_WritePin(GPIOE, E_Pin, 1);
+		HAL_GPIO_WritePin(GPIOE, G_Pin, 1);
+		break;
+	case 3:
+		HAL_GPIO_WritePin(GPIOE, A_Pin, 1);
+		HAL_GPIO_WritePin(GPIOE, B_Pin, 1);
+		HAL_GPIO_WritePin(GPIOE, C_Pin, 1);
+		HAL_GPIO_WritePin(GPIOE, D_Pin, 1);
+		HAL_GPIO_WritePin(GPIOE, G_Pin, 1);
+		break;
+	case 4:
+		HAL_GPIO_WritePin(GPIOE, B_Pin, 1);
+		HAL_GPIO_WritePin(GPIOE, C_Pin, 1);
+		HAL_GPIO_WritePin(GPIOE, F_Pin, 1);
+		HAL_GPIO_WritePin(GPIOE, G_Pin, 1);
+		break;
+	case 5:
+		HAL_GPIO_WritePin(GPIOE, A_Pin, 1);
+		HAL_GPIO_WritePin(GPIOE, C_Pin, 1);
+		HAL_GPIO_WritePin(GPIOE, D_Pin, 1);
+		HAL_GPIO_WritePin(GPIOE, F_Pin, 1);
+		HAL_GPIO_WritePin(GPIOE, G_Pin, 1);
+		break;
+	case 6:
+		HAL_GPIO_WritePin(GPIOE, A_Pin, 1);
+		HAL_GPIO_WritePin(GPIOE, C_Pin, 1);
+		HAL_GPIO_WritePin(GPIOE, D_Pin, 1);
+		HAL_GPIO_WritePin(GPIOE, E_Pin, 1);
+		HAL_GPIO_WritePin(GPIOE, F_Pin, 1);
+		HAL_GPIO_WritePin(GPIOE, G_Pin, 1);
+		break;
+	case 7:
+		HAL_GPIO_WritePin(GPIOE, A_Pin, 1);
+		HAL_GPIO_WritePin(GPIOE, B_Pin, 1);
+		HAL_GPIO_WritePin(GPIOE, C_Pin, 1);
+		break;
+	case 8:
+		HAL_GPIO_WritePin(GPIOE, A_Pin, 1);
+		HAL_GPIO_WritePin(GPIOE, B_Pin, 1);
+		HAL_GPIO_WritePin(GPIOE, C_Pin, 1);
+		HAL_GPIO_WritePin(GPIOE, D_Pin, 1);
+		HAL_GPIO_WritePin(GPIOE, E_Pin, 1);
+		HAL_GPIO_WritePin(GPIOE, F_Pin, 1);
+		HAL_GPIO_WritePin(GPIOE, G_Pin, 1);
+		break;
+	case 9:
+		HAL_GPIO_WritePin(GPIOE, A_Pin, 1);
+		HAL_GPIO_WritePin(GPIOE, B_Pin, 1);
+		HAL_GPIO_WritePin(GPIOE, C_Pin, 1);
+		HAL_GPIO_WritePin(GPIOE, D_Pin, 1);
+		HAL_GPIO_WritePin(GPIOE, F_Pin, 1);
+		HAL_GPIO_WritePin(GPIOE, G_Pin, 1);
+		break;
+	}
 }
 /* USER CODE END 0 */
 
