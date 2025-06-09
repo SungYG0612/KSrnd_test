@@ -128,6 +128,7 @@ void SysTick_Handler(void)
 	if (time_value >= 500)
 	{
 		flag++;
+		flag %= 10;
 		time_value = 0;
 	}
 	time_value ++;

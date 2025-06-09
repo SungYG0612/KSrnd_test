@@ -43,18 +43,22 @@
 
 /* USER CODE BEGIN PV */
 int flag=0;
+uint32_t number[10]={0x003f00c0,0x000600f9,0x005b00a4,0x004f00b0,0x00660099,0x006d0092,0x007d0082,0x002700d8,0x007f0080,0x006f0090};
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 /* USER CODE BEGIN PFP */
-
+void number_sel(int);
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-
+void number_sel(int sel)
+{
+	GPIOE->BSRR = number[sel];
+}
 /* USER CODE END 0 */
 
 /**
@@ -94,6 +98,7 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+	  number_sel(flag);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -167,10 +172,10 @@ static void MX_GPIO_Init(void)
                           |F_Pin|B_Pin|A_Pin|G_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOB, LED_Pin|S2_Pin|S3_Pin|S4_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOB, S1_Pin|S2_Pin|S3_Pin|S4_Pin, GPIO_PIN_SET);
+  HAL_GPIO_WritePin(S1_GPIO_Port, S1_Pin, GPIO_PIN_SET);
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(BUZ_GPIO_Port, BUZ_Pin, GPIO_PIN_SET);
