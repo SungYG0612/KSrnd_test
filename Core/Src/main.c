@@ -49,7 +49,7 @@ int flag=0;
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 /* USER CODE BEGIN PFP */
-
+void GPIOWrite(int);
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -94,33 +94,7 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-	  switch(flag %= 4)
-	  {
-	  case 0:
-		  HAL_GPIO_WritePin(G_GPIO_Port, G_Pin, SET);
-		  HAL_GPIO_WritePin(B_GPIO_Port, B_Pin, RESET);
-		  HAL_GPIO_WritePin(E_GPIO_Port, E_Pin, RESET);
-		  HAL_GPIO_WritePin(D_GPIO_Port, D_Pin, RESET);
-		  break;
-	  case 1:
-		  HAL_GPIO_WritePin(G_GPIO_Port, G_Pin, RESET);
-		  HAL_GPIO_WritePin(B_GPIO_Port, B_Pin, SET);
-		  HAL_GPIO_WritePin(E_GPIO_Port, E_Pin, RESET);
-		  HAL_GPIO_WritePin(D_GPIO_Port, D_Pin, RESET);
-		  break;
-	  case 2:
-		  HAL_GPIO_WritePin(G_GPIO_Port, G_Pin, RESET);
-		  HAL_GPIO_WritePin(B_GPIO_Port, B_Pin, RESET);
-		  HAL_GPIO_WritePin(E_GPIO_Port, E_Pin, SET);
-		  HAL_GPIO_WritePin(D_GPIO_Port, D_Pin, RESET);
-		  break;
-	  case 3:
-		  HAL_GPIO_WritePin(G_GPIO_Port, G_Pin, RESET);
-		  HAL_GPIO_WritePin(B_GPIO_Port, B_Pin, RESET);
-		  HAL_GPIO_WritePin(E_GPIO_Port, E_Pin, RESET);
-		  HAL_GPIO_WritePin(D_GPIO_Port, D_Pin, SET);
-		  break;
-	  }
+	  GPIOWrite(flag%=4);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -241,7 +215,36 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
-
+void GPIOWrite(int sel)
+{
+	switch (sel)
+	{
+	case 0:
+		HAL_GPIO_WritePin(G_GPIO_Port, G_Pin, SET);
+		HAL_GPIO_WritePin(B_GPIO_Port, B_Pin, RESET);
+		HAL_GPIO_WritePin(E_GPIO_Port, E_Pin, RESET);
+		HAL_GPIO_WritePin(D_GPIO_Port, D_Pin, RESET);
+		break;
+	case 1:
+		HAL_GPIO_WritePin(G_GPIO_Port, G_Pin, RESET);
+		HAL_GPIO_WritePin(B_GPIO_Port, B_Pin, SET);
+		HAL_GPIO_WritePin(E_GPIO_Port, E_Pin, RESET);
+		HAL_GPIO_WritePin(D_GPIO_Port, D_Pin, RESET);
+		break;
+	case 2:
+		HAL_GPIO_WritePin(G_GPIO_Port, G_Pin, RESET);
+		HAL_GPIO_WritePin(B_GPIO_Port, B_Pin, RESET);
+		HAL_GPIO_WritePin(E_GPIO_Port, E_Pin, SET);
+		HAL_GPIO_WritePin(D_GPIO_Port, D_Pin, RESET);
+		break;
+	case 3:
+		HAL_GPIO_WritePin(G_GPIO_Port, G_Pin, RESET);
+		HAL_GPIO_WritePin(B_GPIO_Port, B_Pin, RESET);
+		HAL_GPIO_WritePin(E_GPIO_Port, E_Pin, RESET);
+		HAL_GPIO_WritePin(D_GPIO_Port, D_Pin, SET);
+		break;
+	}
+}
 /* USER CODE END 4 */
 
 /**
