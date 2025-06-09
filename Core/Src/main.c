@@ -18,6 +18,7 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 
@@ -41,7 +42,7 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-
+int flag=0;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -93,6 +94,33 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+	  switch(flag)
+	  {
+	  case 0:
+		  HAL_GPIO_WritePin(G_GPIO_Port, G_Pin, SET);
+		  HAL_GPIO_WritePin(B_GPIO_Port, B_Pin, RESET);
+		  HAL_GPIO_WritePin(E_GPIO_Port, E_Pin, RESET);
+		  HAL_GPIO_WritePin(D_GPIO_Port, D_Pin, RESET);
+		  break;
+	  case 1:
+		  HAL_GPIO_WritePin(G_GPIO_Port, G_Pin, RESET);
+		  HAL_GPIO_WritePin(B_GPIO_Port, B_Pin, SET);
+		  HAL_GPIO_WritePin(E_GPIO_Port, E_Pin, RESET);
+		  HAL_GPIO_WritePin(D_GPIO_Port, D_Pin, RESET);
+		  break;
+	  case 2:
+		  HAL_GPIO_WritePin(G_GPIO_Port, G_Pin, RESET);
+		  HAL_GPIO_WritePin(B_GPIO_Port, B_Pin, RESET);
+		  HAL_GPIO_WritePin(E_GPIO_Port, E_Pin, SET);
+		  HAL_GPIO_WritePin(D_GPIO_Port, D_Pin, RESET);
+		  break;
+	  case 3:
+		  HAL_GPIO_WritePin(G_GPIO_Port, G_Pin, RESET);
+		  HAL_GPIO_WritePin(B_GPIO_Port, B_Pin, RESET);
+		  HAL_GPIO_WritePin(E_GPIO_Port, E_Pin, RESET);
+		  HAL_GPIO_WritePin(D_GPIO_Port, D_Pin, SET);
+		  break;
+	  }
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -166,11 +194,13 @@ static void MX_GPIO_Init(void)
                           |F_Pin|B_Pin|A_Pin|G_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOB, LED_Pin|S1_Pin|S2_Pin|S3_Pin
-                          |S4_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(BUZ_GPIO_Port, BUZ_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOB, S1_Pin|S2_Pin|S3_Pin|S4_Pin, GPIO_PIN_SET);
+
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(BUZ_GPIO_Port, BUZ_Pin, GPIO_PIN_SET);
 
   /*Configure GPIO pins : D_Pin DP_Pin C_Pin E_Pin
                            F_Pin B_Pin A_Pin G_Pin */
