@@ -91,9 +91,6 @@ void number_sel(int sel)
 		HAL_GPIO_WritePin(GPIOE, A_Pin|B_Pin|C_Pin|D_Pin|F_Pin|G_Pin , 1);
 		break;
 	}
-	number++;
-	number%=10;
-	flag = 0;
 }
 /* USER CODE END 0 */
 
@@ -137,6 +134,9 @@ int main(void)
 	  if(flag)
 	  {
 		  number_sel(number);
+		  number ++;
+		  number %= 10;
+		  flag = 0;
 	  }
     /* USER CODE END WHILE */
 
