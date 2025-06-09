@@ -94,33 +94,6 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-	  switch(flag)
-	  {
-	  case 0:
-		  HAL_GPIO_WritePin(G_GPIO_Port, G_Pin, SET);
-		  HAL_GPIO_WritePin(B_GPIO_Port, B_Pin, RESET);
-		  HAL_GPIO_WritePin(E_GPIO_Port, E_Pin, RESET);
-		  HAL_GPIO_WritePin(D_GPIO_Port, D_Pin, RESET);
-		  break;
-	  case 1:
-		  HAL_GPIO_WritePin(G_GPIO_Port, G_Pin, RESET);
-		  HAL_GPIO_WritePin(B_GPIO_Port, B_Pin, SET);
-		  HAL_GPIO_WritePin(E_GPIO_Port, E_Pin, RESET);
-		  HAL_GPIO_WritePin(D_GPIO_Port, D_Pin, RESET);
-		  break;
-	  case 2:
-		  HAL_GPIO_WritePin(G_GPIO_Port, G_Pin, RESET);
-		  HAL_GPIO_WritePin(B_GPIO_Port, B_Pin, RESET);
-		  HAL_GPIO_WritePin(E_GPIO_Port, E_Pin, SET);
-		  HAL_GPIO_WritePin(D_GPIO_Port, D_Pin, RESET);
-		  break;
-	  case 3:
-		  HAL_GPIO_WritePin(G_GPIO_Port, G_Pin, RESET);
-		  HAL_GPIO_WritePin(B_GPIO_Port, B_Pin, RESET);
-		  HAL_GPIO_WritePin(E_GPIO_Port, E_Pin, RESET);
-		  HAL_GPIO_WritePin(D_GPIO_Port, D_Pin, SET);
-		  break;
-	  }
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */

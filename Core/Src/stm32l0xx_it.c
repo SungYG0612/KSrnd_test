@@ -125,29 +125,16 @@ void PendSV_Handler(void)
 void SysTick_Handler(void)
 {
   /* USER CODE BEGIN SysTick_IRQn 0 */
-if(time_value >= 500)
-{
-	HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin);
-	time_value = 0;
-}
 	if (time_value >= 500)
 	{
-		if(flag < 4)
-		{
-			flag++;
-		}
-		else
-		{
-			flag = 0;
-		}
+		flag++;
 		time_value = 0;
 	}
-	else
 	time_value ++;
   /* USER CODE END SysTick_IRQn 0 */
   HAL_IncTick();
   /* USER CODE BEGIN SysTick_IRQn 1 */
-time_value += 1;
+
   /* USER CODE END SysTick_IRQn 1 */
 }
 
