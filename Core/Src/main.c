@@ -43,55 +43,20 @@
 
 /* USER CODE BEGIN PV */
 int flag = 0;
-int number = 0;
+int32_t FND_Number[10] = {0x82007d00,0xdb002400,0x1600e900,0x1a00e500,0x4b00b400,0x2a00d500,0x2200dd00,0x9b006400,0x0200fd00,0x0a00f500};
+int sel = 0;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 /* USER CODE BEGIN PFP */
-void number_sel(int);
+
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-void number_sel(int sel)
-{
-	HAL_GPIO_WritePin(GPIOE, A_Pin|B_Pin|C_Pin|D_Pin|E_Pin|F_Pin|G_Pin|DP_Pin , 0);
-	switch(sel)
-	{
-	case 0:
-		HAL_GPIO_WritePin(GPIOE, A_Pin|B_Pin|C_Pin|D_Pin|E_Pin|F_Pin, 1);
-		break;
-	case 1:
-		HAL_GPIO_WritePin(GPIOE, B_Pin|C_Pin, 1);
-		break;
-	case 2:
-		HAL_GPIO_WritePin(GPIOE, A_Pin|B_Pin|D_Pin|E_Pin|G_Pin, 1);
-		break;
-	case 3:
-		HAL_GPIO_WritePin(GPIOE, A_Pin|B_Pin|C_Pin|D_Pin|G_Pin, 1);
-		break;
-	case 4:
-		HAL_GPIO_WritePin(GPIOE, B_Pin|C_Pin|F_Pin|G_Pin, 1);
-		break;
-	case 5:
-		HAL_GPIO_WritePin(GPIOE, A_Pin|C_Pin|D_Pin|F_Pin|G_Pin, 1);
-		break;
-	case 6:
-		HAL_GPIO_WritePin(GPIOE, A_Pin|C_Pin|D_Pin|E_Pin|F_Pin|G_Pin, 1);
-		break;
-	case 7:
-		HAL_GPIO_WritePin(GPIOE, A_Pin|B_Pin|C_Pin, 1);
-		break;
-	case 8:
-		HAL_GPIO_WritePin(GPIOE, A_Pin|B_Pin|C_Pin|D_Pin|E_Pin|F_Pin|G_Pin , 1);
-		break;
-	case 9:
-		HAL_GPIO_WritePin(GPIOE, A_Pin|B_Pin|C_Pin|D_Pin|F_Pin|G_Pin , 1);
-		break;
-	}
-}
+
 /* USER CODE END 0 */
 
 /**
@@ -133,9 +98,9 @@ int main(void)
   {
 	  if(flag)
 	  {
-		  number_sel(number);
-		  number ++;
-		  number %= 10;
+		  GPIOE->BSRR = FND_Number[sel];
+		  sel ++;
+		  sel %= 10;
 		  flag = 0;
 	  }
     /* USER CODE END WHILE */
