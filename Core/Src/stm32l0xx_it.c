@@ -58,6 +58,8 @@ int time_value=0;
 
 /* USER CODE BEGIN EV */
 extern int flag;
+extern int32_t FND_Number[10];
+extern int FND_Buf[4];
 /* USER CODE END EV */
 
 /******************************************************************************/
@@ -125,9 +127,31 @@ void PendSV_Handler(void)
 void SysTick_Handler(void)
 {
   /* USER CODE BEGIN SysTick_IRQn 0 */
-	if (time_value >= 250)
+	if (time_value >= 40)
 	{
 		flag = 1;
+		for(int FND_sel=0; FND_sel<4; FND_sel++)
+		{
+			switch(FND_sel)
+			{
+			case 0:
+				GPIOB->BSRR = 0x1000;
+				GPIOE->BSRR = FND_Number[1];
+				break;
+			case 1:
+				GPIOB->BSRR = 0x2000;
+				GPIOE->BSRR = FND_Number[2];
+				break;
+			case 2:
+				GPIOB->BSRR = 0x4000;
+				GPIOE->BSRR = FND_Number[3];
+				break;
+			case 3:
+				GPIOB->BSRR = 0x8000;
+				GPIOE->BSRR = FND_Number[4];
+				break;
+			}
+		}
 		time_value = 0;
 	}
 	time_value ++;

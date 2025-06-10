@@ -43,16 +43,15 @@
 
 /* USER CODE BEGIN PV */
 int flag = 0;
-const int32_t FND_Number[10] = {0x82007d00,0xdb002400,0x1600e900,0x1a00e500,0x4b00b400,0x2a00d500,0x2200dd00,0x9b006400,0x0200fd00,0x0a00f500};
-int number_sel = 0;
-int FND_sel = 0;
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 /* USER CODE BEGIN PFP */
-
+void project_initialization(void);
+void project_main(void);
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -90,20 +89,14 @@ int main(void)
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   /* USER CODE BEGIN 2 */
-
+  project_initialization();
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-	  if(flag)
-	  {
-		  GPIOE->BSRR = FND_Number[number_sel];
-		  number_sel ++;
-		  number_sel %= 10;
-		  flag = 0;
-	  }
+	  project_main();
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
