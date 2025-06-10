@@ -41,7 +41,8 @@
 
 /* Private variables ---------------------------------------------------------*/
 /* USER CODE BEGIN PV */
-
+unsigned int time_value = 0;
+int FND_sel = 0;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -57,7 +58,7 @@
 /* External variables --------------------------------------------------------*/
 
 /* USER CODE BEGIN EV */
-int FND_sel = 0;
+extern int flag;
 extern int FND_Buf[4];
 /* USER CODE END EV */
 
@@ -128,30 +129,35 @@ void SysTick_Handler(void)
   /* USER CODE BEGIN SysTick_IRQn 0 */
 	switch(FND_sel)
 	{
-	case 0:
-		GPIOB->BSRR = 0x70008000;
-		GPIOE->BSRR = FND_Buf[0];
-		break;
-	case 1:
-		GPIOB->BSRR = 0xb0004000;
-		GPIOE->BSRR = FND_Buf[1];
-		break;
-	case 2:
-		GPIOB->BSRR = 0xd0002000;
-		GPIOE->BSRR = FND_Buf[2];
-		break;
-	case 3:
-		GPIOB->BSRR = 0xe0001000;
-		GPIOE->BSRR = FND_Buf[3];
-		break;
+		case 0:
+			GPIOB->BSRR = 0x70008000;
+			GPIOE->BSRR = FND_Buf[0];
+			break;
+		case 1:
+			GPIOB->BSRR = 0xb0004000;
+			GPIOE->BSRR = FND_Buf[1];
+			break;
+		case 2:
+			GPIOB->BSRR = 0xd0002000;
+			GPIOE->BSRR = FND_Buf[2];
+			break;
+		case 3:
+			GPIOB->BSRR = 0xe0001000;
+			GPIOE->BSRR = FND_Buf[3];
+			break;
 	}
 	FND_sel++;
 	FND_sel%=4;
-
   /* USER CODE END SysTick_IRQn 0 */
   HAL_IncTick();
   /* USER CODE BEGIN SysTick_IRQn 1 */
 
+	if(time_value >= 100)
+	{
+		flag = 1;
+		time_value = 0;
+	}
+	time_value ++;
   /* USER CODE END SysTick_IRQn 1 */
 }
 
