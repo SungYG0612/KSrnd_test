@@ -129,7 +129,7 @@ void SysTick_Handler(void)
 	Pin_value = GPIOD->IDR;
 	Pin_value &= 0x7c00;
 	Pin_value ^= 0x7c00;
-	if(Pin_value & 0x7c00)
+	if(Pin_value)
 	{
 		flag = 1;
 	}
