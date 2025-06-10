@@ -128,7 +128,7 @@ void PendSV_Handler(void)
 void SysTick_Handler(void)
 {
   /* USER CODE BEGIN SysTick_IRQn 0 */
-	if (time_value >= 5)
+	if (time_value >= 10)
 	{
 		switch(FND_sel)
 		{
