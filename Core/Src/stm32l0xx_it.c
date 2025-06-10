@@ -125,7 +125,7 @@ void PendSV_Handler(void)
 void SysTick_Handler(void)
 {
   /* USER CODE BEGIN SysTick_IRQn 0 */
-	if (time_value >= 500)
+	if (time_value >= 250)
 	{
 		flag = 1;
 		time_value = 0;

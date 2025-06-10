@@ -44,7 +44,8 @@
 /* USER CODE BEGIN PV */
 int flag = 0;
 const int32_t FND_Number[10] = {0x82007d00,0xdb002400,0x1600e900,0x1a00e500,0x4b00b400,0x2a00d500,0x2200dd00,0x9b006400,0x0200fd00,0x0a00f500};
-int sel = 0;
+int number_sel = 0;
+int FND_sel = 0;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -98,9 +99,9 @@ int main(void)
   {
 	  if(flag)
 	  {
-		  GPIOE->BSRR = FND_Number[sel];
-		  sel ++;
-		  sel %= 10;
+		  GPIOE->BSRR = FND_Number[number_sel];
+		  number_sel ++;
+		  number_sel %= 10;
 		  flag = 0;
 	  }
     /* USER CODE END WHILE */
@@ -176,10 +177,10 @@ static void MX_GPIO_Init(void)
                           |F_Pin|B_Pin|A_Pin|G_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOB, LED_Pin|S2_Pin|S3_Pin|S4_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(S1_GPIO_Port, S1_Pin, GPIO_PIN_SET);
+  HAL_GPIO_WritePin(GPIOB, S1_Pin|S2_Pin|S3_Pin|S4_Pin, GPIO_PIN_SET);
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(BUZ_GPIO_Port, BUZ_Pin, GPIO_PIN_SET);
