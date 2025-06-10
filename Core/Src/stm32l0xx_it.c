@@ -128,25 +128,25 @@ void PendSV_Handler(void)
 void SysTick_Handler(void)
 {
   /* USER CODE BEGIN SysTick_IRQn 0 */
-	if (time_value >= 10)
+	if (time_value >= 5)
 	{
 		switch(FND_sel)
 		{
 		case 0:
 			GPIOB->BSRR = 0x70008000;
-			GPIOE->BSRR = FND_Number[FND_Buf[FND_sel]];
+			GPIOE->BSRR = FND_Number[FND_Buf[0]];
 			break;
 		case 1:
 			GPIOB->BSRR = 0xb0004000;
-			GPIOE->BSRR = FND_Number[FND_Buf[FND_sel]];
+			GPIOE->BSRR = FND_Number[FND_Buf[1]];
 			break;
 		case 2:
 			GPIOB->BSRR = 0xd0002000;
-			GPIOE->BSRR = FND_Number[FND_Buf[FND_sel]];
+			GPIOE->BSRR = FND_Number[FND_Buf[2]];
 			break;
 		case 3:
 			GPIOB->BSRR = 0xe0001000;
-			GPIOE->BSRR = FND_Number[FND_Buf[FND_sel]];
+			GPIOE->BSRR = FND_Number[FND_Buf[3]];
 			break;
 		}
 		flag = 1;
