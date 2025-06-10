@@ -42,6 +42,7 @@
 /* Private variables ---------------------------------------------------------*/
 /* USER CODE BEGIN PV */
 int time_value=0;
+int flag = 0;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -58,6 +59,7 @@ int time_value=0;
 
 /* USER CODE BEGIN EV */
 const int32_t FND_Number[10] = {0x82007d00,0xdb002400,0x1600e900,0x1a00e500,0x4b00b400,0x2a00d500,0x2200dd00,0x9b006400,0x0200fd00,0x0a00f500};
+int FND_sel = 0;
 /* USER CODE END EV */
 
 /******************************************************************************/
@@ -125,14 +127,27 @@ void PendSV_Handler(void)
 void SysTick_Handler(void)
 {
   /* USER CODE BEGIN SysTick_IRQn 0 */
-	GPIOB->BSRR = 0x70008000;
-	GPIOE->BSRR = FND_Number[0];
-	GPIOB->BSRR = 0xb0004000;
-	GPIOE->BSRR = FND_Number[6];
-	GPIOB->BSRR = 0xd0002000;
-	GPIOE->BSRR = FND_Number[1];
-	GPIOB->BSRR = 0xe0001000;
-	GPIOE->BSRR = FND_Number[2];
+	switch(FND_sel)
+	{
+	case 0:
+		GPIOB->BSRR = 0x70008000;
+		GPIOE->BSRR = FND_Number[0];
+		break;
+	case 1:
+		GPIOB->BSRR = 0xb0004000;
+		GPIOE->BSRR = FND_Number[6];
+		break;
+	case 2:
+		GPIOB->BSRR = 0xd0002000;
+		GPIOE->BSRR = FND_Number[1];
+		break;
+	case 3:
+		GPIOB->BSRR = 0xe0001000;
+		GPIOE->BSRR = FND_Number[2];
+		break;
+	}
+	flag = 1;
+
   /* USER CODE END SysTick_IRQn 0 */
   HAL_IncTick();
   /* USER CODE BEGIN SysTick_IRQn 1 */
