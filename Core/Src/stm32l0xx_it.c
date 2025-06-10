@@ -57,7 +57,8 @@
 /* External variables --------------------------------------------------------*/
 
 /* USER CODE BEGIN EV */
-
+extern int flag;
+extern int Pin_value;
 /* USER CODE END EV */
 
 /******************************************************************************/
@@ -125,7 +126,13 @@ void PendSV_Handler(void)
 void SysTick_Handler(void)
 {
   /* USER CODE BEGIN SysTick_IRQn 0 */
-
+	Pin_value = GPIOD->IDR;
+	Pin_value &= 0x7c00;
+	Pin_value ^= 0x7c00;
+	if(Pin_value & 0x7c00)
+	{
+		flag = 1;
+	}
   /* USER CODE END SysTick_IRQn 0 */
   HAL_IncTick();
   /* USER CODE BEGIN SysTick_IRQn 1 */
