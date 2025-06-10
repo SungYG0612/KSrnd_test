@@ -41,8 +41,8 @@
 
 /* Private variables ---------------------------------------------------------*/
 /* USER CODE BEGIN PV */
-int time_value=0;
 int flag = 0;
+const int32_t FND_Number[10] = {0x82007d00,0xdb002400,0x1600e900,0x1a00e500,0x4b00b400,0x2a00d500,0x2200dd00,0x9b006400,0x0200fd00,0x0a00f500};
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -58,8 +58,8 @@ int flag = 0;
 /* External variables --------------------------------------------------------*/
 
 /* USER CODE BEGIN EV */
-const int32_t FND_Number[10] = {0x82007d00,0xdb002400,0x1600e900,0x1a00e500,0x4b00b400,0x2a00d500,0x2200dd00,0x9b006400,0x0200fd00,0x0a00f500};
-int FND_sel = 0;
+extern int FND_sel;
+extern int FND_Buf[4];
 /* USER CODE END EV */
 
 /******************************************************************************/
@@ -131,19 +131,19 @@ void SysTick_Handler(void)
 	{
 	case 0:
 		GPIOB->BSRR = 0x70008000;
-		GPIOE->BSRR = FND_Number[0];
+		GPIOE->BSRR = FND_Number[FND_Buf[FND_sel]];
 		break;
 	case 1:
 		GPIOB->BSRR = 0xb0004000;
-		GPIOE->BSRR = FND_Number[6];
+		GPIOE->BSRR = FND_Number[FND_Buf[FND_sel]];
 		break;
 	case 2:
 		GPIOB->BSRR = 0xd0002000;
-		GPIOE->BSRR = FND_Number[1];
+		GPIOE->BSRR = FND_Number[FND_Buf[FND_sel]];
 		break;
 	case 3:
 		GPIOB->BSRR = 0xe0001000;
-		GPIOE->BSRR = FND_Number[2];
+		GPIOE->BSRR = FND_Number[FND_Buf[FND_sel]];
 		break;
 	}
 	flag = 1;
