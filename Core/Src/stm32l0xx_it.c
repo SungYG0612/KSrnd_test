@@ -58,7 +58,7 @@
 
 /* USER CODE BEGIN EV */
 extern int flag;
-extern int Pin_value;
+extern unsigned int Pin_value;
 /* USER CODE END EV */
 
 /******************************************************************************/
