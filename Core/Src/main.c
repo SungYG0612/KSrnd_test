@@ -18,6 +18,7 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 
@@ -48,7 +49,8 @@
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 /* USER CODE BEGIN PFP */
-
+void project_initialization(void);
+void project_main(void);
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -86,13 +88,14 @@ int main(void)
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   /* USER CODE BEGIN 2 */
-
+  project_initialization();
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+	  project_main();
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -166,11 +169,13 @@ static void MX_GPIO_Init(void)
                           |F_Pin|B_Pin|A_Pin|G_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOB, LED_Pin|S1_Pin|S2_Pin|S3_Pin
-                          |S4_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOB, LED_Pin|S2_Pin|S3_Pin|S4_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(BUZ_GPIO_Port, BUZ_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(S1_GPIO_Port, S1_Pin, GPIO_PIN_SET);
+
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(BUZ_GPIO_Port, BUZ_Pin, GPIO_PIN_SET);
 
   /*Configure GPIO pins : D_Pin DP_Pin C_Pin E_Pin
                            F_Pin B_Pin A_Pin G_Pin */
@@ -190,9 +195,9 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : PRT_Pin SEL_Pin HOLD_Pin SELD13_Pin
+  /*Configure GPIO pins : PRT_Pin SET_Pin HOLD_Pin SEL_Pin
                            DSP_Pin */
-  GPIO_InitStruct.Pin = PRT_Pin|SEL_Pin|HOLD_Pin|SELD13_Pin
+  GPIO_InitStruct.Pin = PRT_Pin|SET_Pin|HOLD_Pin|SEL_Pin
                           |DSP_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
