@@ -30,5 +30,4 @@ void project_main(void)
 //////////////////////////////////
 void Initialize(void)
 {
-
 }

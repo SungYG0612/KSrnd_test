@@ -129,30 +129,30 @@ void SysTick_Handler(void)
   /* USER CODE BEGIN SysTick_IRQn 0 */
 	if (time_value >= 40)
 	{
-		flag = 1;
 		for(int FND_sel=0; FND_sel<4; FND_sel++)
 		{
 			switch(FND_sel)
 			{
 			case 0:
-				GPIOB->BSRR = 0x1000;
-				GPIOE->BSRR = FND_Number[1];
+				GPIOB->BSRR = 0xe0001000;
+				GPIOE->BSRR = FND_Number[4];
 				break;
 			case 1:
-				GPIOB->BSRR = 0x2000;
-				GPIOE->BSRR = FND_Number[2];
-				break;
-			case 2:
-				GPIOB->BSRR = 0x4000;
+				GPIOB->BSRR = 0xd0002000;
 				GPIOE->BSRR = FND_Number[3];
 				break;
+			case 2:
+				GPIOB->BSRR = 0xb0004000;
+				GPIOE->BSRR = FND_Number[2];
+				break;
 			case 3:
-				GPIOB->BSRR = 0x8000;
-				GPIOE->BSRR = FND_Number[4];
+				GPIOB->BSRR = 0x70008000;
+				GPIOE->BSRR = FND_Number[1];
 				break;
 			}
 		}
 		time_value = 0;
+		flag = 1;
 	}
 	time_value ++;
   /* USER CODE END SysTick_IRQn 0 */
