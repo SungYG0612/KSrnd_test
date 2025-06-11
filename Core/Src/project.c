@@ -6,12 +6,20 @@
 
 //////////////////////////////////
 /*variable*/
-char Flag = '0';
-unsigned int uiPin_value = 0x0000;
-const unsigned int FND_Table[10] = {0x82007d00,0xdb002400,0x1600e900,0x1a00e500,
+int bButton_Flag = 0;
+int bSet_Flag = 0;
+int bBlink_Flag = 0;
+
+const unsigned int FND_Number_Table[10] = {0x82007d00,0xdb002400,0x1600e900,0x1a00e500,
 		0x4b00b400,0x2a00d500,0x2200dd00,0x9b006400,0x0200fd00,0x0a00f500};
+const unsigned int FND_Port_Table[4] = {0x70008000, 0xb0004000, 0xd0002000, 0xe0001000};
+
 int iNumber_Buf = 0;
 unsigned int uiDisplay_Buf[4] = {};
+unsigned int uiFND_Port_Buf[4] = {};
+
+unsigned int uiPort_sel = 0;
+unsigned int uiPin_value = 0x0000;
 char cNumber_sign;
 //////////////////////////////////
 void Initialize(void);
@@ -29,14 +37,30 @@ void project_main(void)
 {
 	while(1)
 	{
-		if(Flag=='1')
+		if(bButton_Flag)
 		{
 			if(uiPin_value == 0x0400) {iNumber_Buf--;}		//1번 버튼 = iNumber_Buf 증가
+			if(uiPin_value == 0x0800) {bSet_Flag ^= 1;}
 			if(uiPin_value == 0x1000) {iNumber_Buf++;}		//3번 버튼 = iNumber_Buf 감소
 			if(uiPin_value == 0x4000) {iNumber_Buf=0;}		//5번 버튼 = iNumber_Buf 0 초기화
 			if(iNumber_Buf>9999 || iNumber_Buf<-999) {iNumber_Buf = 0;}		//iNumber_Buf가 9999보다 크고 -999보다 작다면 0으로 초기화
 			Number_convert(iNumber_Buf);
-			Flag = '0';
+			bButton_Flag = 0;
+		}
+		if(bBlink_Flag)
+		{
+			uiPort_sel++;
+			switch(uiPort_sel)
+			{
+			case 0:
+				for(int sel; sel<4; sel++) {uiFND_Port_Buf[sel] = FND_Port_Table[sel];}
+				break;
+			case 1:
+				for(int sel; sel<4; sel++) {uiFND_Port_Buf[sel] = 0xff000000;}
+				break;
+			}
+
+
 		}
 	}
 }
@@ -59,31 +83,31 @@ void Number_convert(int input_number)		//숫자 변환 함수
 
 	if(input_number >= 1000)
 	{
-		uiNumber_state[0] = FND_Table[input_number / 1000];
-		uiNumber_state[1] = FND_Table[(input_number % 1000) / 100];
-		uiNumber_state[2] = FND_Table[(input_number % 100) / 10];
-		uiNumber_state[3] = FND_Table[input_number % 10];
+		uiNumber_state[0] = FND_Number_Table[input_number / 1000];
+		uiNumber_state[1] = FND_Number_Table[(input_number % 1000) / 100];
+		uiNumber_state[2] = FND_Number_Table[(input_number % 100) / 10];
+		uiNumber_state[3] = FND_Number_Table[input_number % 10];
 	}
 	else if(input_number >= 100)
 	{
 		uiNumber_state[0] = 0xff000000;
-		uiNumber_state[1] = FND_Table[(input_number % 1000) / 100];
-		uiNumber_state[2] = FND_Table[(input_number % 100) / 10];
-		uiNumber_state[3] = FND_Table[input_number % 10];
+		uiNumber_state[1] = FND_Number_Table[(input_number % 1000) / 100];
+		uiNumber_state[2] = FND_Number_Table[(input_number % 100) / 10];
+		uiNumber_state[3] = FND_Number_Table[input_number % 10];
 	}
 	else if(input_number >= 10)
 	{
 		uiNumber_state[0] = 0xff000000;
 		uiNumber_state[1] = 0xff000000;
-		uiNumber_state[2] = FND_Table[(input_number % 100) / 10];
-		uiNumber_state[3] = FND_Table[input_number % 10];
+		uiNumber_state[2] = FND_Number_Table[(input_number % 100) / 10];
+		uiNumber_state[3] = FND_Number_Table[input_number % 10];
 	}
 	else
 	{
 		uiNumber_state[0] = 0xff000000;
 		uiNumber_state[1] = 0xff000000;
 		uiNumber_state[2] = 0xff000000;
-		uiNumber_state[3] = FND_Table[input_number % 10];
+		uiNumber_state[3] = FND_Number_Table[input_number % 10];
 	}
 
 	if(cNumber_sign == '-') {uiDisplay_Buf[0] = 0x7f008000;}
