@@ -55,7 +55,11 @@ void Number_convert(int input_number)		//숫자 변환 함수
 		cNumber_sign = '-';		//숫자 부호 저장 변수에 '-'저장
 		input_number *= -1;		//음수 X -1로 양수로 변환
 	}
-	else {uiDisplay_Buf[0] = FND_Table[input_number / 1000];}
+	else
+	{
+		cNumber_sign = '+';
+		uiDisplay_Buf[0] = FND_Table[input_number / 1000];
+	}
 
 	uiDisplay_Buf[1] = FND_Table[(input_number % 1000) / 100];
 	uiDisplay_Buf[2] = FND_Table[(input_number % 100) / 10];
@@ -72,7 +76,7 @@ void Number_convert(int input_number)		//숫자 변환 함수
 			}
 			uiDisplay_Buf[1] |= 0xff000000;			//1번 FND 미표시
 		}
-		if(cNumber_sign == '-') {uiDisplay_Buf[0] = 0x7f008000;}		//0번 FND 미표시
-		else {uiDisplay_Buf[0] |= 0xff000000;}						//0번 FND '-' 표시
+		if(cNumber_sign == '-') {uiDisplay_Buf[0] = 0x7f008000;}		//0번 FND '-' 표시
+		else {uiDisplay_Buf[0] |= 0xff000000;}							//0번 FND 미표시
 	}
 }
