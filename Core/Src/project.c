@@ -72,11 +72,11 @@ void Number_convert(int input_number)		//숫자 변환 함수
 		{
 			if(uiDisplay_Buf[2] == FND_Table[0])					//0번 버퍼가 0이거나 부호가 '-'이고, 1번 버퍼가 0이고, 2번 버퍼가 0이면
 			{
-				uiDisplay_Buf[2] = 0xff000000;		//2번 FND 미표시
+				uiDisplay_Buf[2] = (uiDisplay_Buf[2] & 0xffff00ff) | 0xff000000;		//2번 FND 미표시
 			}
-			uiDisplay_Buf[1] = 0xff000000;			//1번 FND 미표시
+			uiDisplay_Buf[1] = (uiDisplay_Buf[1] & 0xffff00ff) | 0xff000000;			//1번 FND 미표시
 		}
 		if(cNumber_sign == '-') {uiDisplay_Buf[0] = 0x7f008000;}		//0번 FND '-' 표시
-		else {uiDisplay_Buf[0] = 0xff000000;}							//0번 FND 미표시
+		else {uiDisplay_Buf[0] = (uiDisplay_Buf[0] & 0xffff00ff) | 0xff000000;}							//0번 FND 미표시
 	}
 }
