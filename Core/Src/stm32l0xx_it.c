@@ -64,6 +64,7 @@ extern int bButton_Flag;
 extern int bSet_Flag;
 extern int bBlink_Flag;
 extern unsigned int uiPin_value;
+extern unsigned int uiFND_Port_Data[4];
 extern unsigned int uiDisplay_Buf[4];
 extern unsigned int uiFND_Port_Buf[4];
 /* USER CODE END EV */
@@ -155,7 +156,7 @@ void SysTick_Handler(void)
 
 	if(bBlink_Flag)
 	{
-		for(int sel=0; sel<4; sel++) {uiFND_Port_Buf[sel] = 0xff000000;}
+		for(int sel=0; sel<4; sel++) {uiFND_Port_Buf[sel] = uiFND_Port_Data[sel];}
 	}
 	else
 	{

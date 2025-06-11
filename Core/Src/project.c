@@ -9,16 +9,18 @@
 int bButton_Flag = 0;
 int bSet_Flag = 0;
 int bBlink_Flag = 0;
+int bSel_Flag = 0;
 
 const unsigned int FND_Number_Table[10] = {0x82007d00,0xdb002400,0x1600e900,0x1a00e500,
 		0x4b00b400,0x2a00d500,0x2200dd00,0x9b006400,0x0200fd00,0x0a00f500};
 const unsigned int FND_Port_Table[4] = {0x70008000, 0xb0004000, 0xd0002000, 0xe0001000};
 
-int iNumber_Buf = 0;
+int iNumber_Buf = 1234;
 unsigned int uiDisplay_Buf[4] = {};
-unsigned int uiFND_Port_Buf[4] = {};
+unsigned int uiFND_Port_Buf[4] = {0x70008000, 0xb0004000, 0xd0002000, 0xe0001000};
 
 unsigned int uiPort_sel = 0;
+unsigned int uiFND_Port_Data[4] = {0x70008000,0xff000000,0xff000000,0xff000000};
 unsigned int uiPin_value = 0x0000;
 char cNumber_sign;
 //////////////////////////////////
@@ -40,12 +42,17 @@ void project_main(void)
 		if(bButton_Flag)
 		{
 			if(uiPin_value == 0x0400) {iNumber_Buf--;}		//1번 버튼 = iNumber_Buf 증가
-			if(uiPin_value == 0x0800) {bSet_Flag ^= 1;}
+			if(uiPin_value == 0x0800) {bSet_Flag ^= 1;}		//2번 버튼 = Setting 버튼 > LED Blink
 			if(uiPin_value == 0x1000) {iNumber_Buf++;}		//3번 버튼 = iNumber_Buf 감소
+			if(uiPin_value == 0x2000) {bSel_Flag = 1;}
 			if(uiPin_value == 0x4000) {iNumber_Buf=0;}		//5번 버튼 = iNumber_Buf 0 초기화
 			if(iNumber_Buf>9999 || iNumber_Buf<-999) {iNumber_Buf = 0;}		//iNumber_Buf가 9999보다 크고 -999보다 작다면 0으로 초기화
 			Number_convert(iNumber_Buf);
 			bButton_Flag = 0;
+		}
+		if(bSel_Flag)
+		{
+			uiPort_sel++;
 		}
 	}
 }
@@ -53,7 +60,7 @@ void project_main(void)
 //////////////////////////////////
 void Initialize(void)
 {
-	for(int init_sel=0; init_sel<4; init_sel++) {uiFND_Port_Buf[init_sel] = FND_Port_Table[init_sel];}
+
 }
 
 void Number_convert(int input_number)		//숫자 변환 함수
