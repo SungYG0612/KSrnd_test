@@ -41,7 +41,7 @@
 
 /* Private variables ---------------------------------------------------------*/
 /* USER CODE BEGIN PV */
-
+unsigned int uiFND_sel = 0;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -57,8 +57,10 @@
 /* External variables --------------------------------------------------------*/
 
 /* USER CODE BEGIN EV */
-extern int iflag;
+extern char Flag;
 extern unsigned int uiPin_value;
+extern unsigned int uiDisplay_Data[4];
+extern char cNumber_sign;
 /* USER CODE END EV */
 
 /******************************************************************************/
@@ -131,7 +133,30 @@ void SysTick_Handler(void)
 	uiPin_value ^= 0x7c00;
 	if(uiPin_value)
 	{
-		iflag = 1;
+		Flag = '1';
+	}
+
+	//////////////////////////////////////////////////////
+
+	switch(uiFND_sel++)
+	{
+	case 0:
+		GPIOB->BSRR = 0x70008000;
+		GPIOE->BSRR = uiDisplay_Data[0];
+		break;
+	case 1:
+		GPIOB->BSRR = 0xb0004000;
+		GPIOE->BSRR = uiDisplay_Data[1];
+		break;
+	case 2:
+		GPIOB->BSRR = 0xd0002000;
+		GPIOE->BSRR = uiDisplay_Data[2];
+		break;
+	case 3:
+		GPIOB->BSRR = 0xe0001000;
+		GPIOE->BSRR = uiDisplay_Data[3];
+		uiFND_sel = 0;
+		break;
 	}
   /* USER CODE END SysTick_IRQn 0 */
   HAL_IncTick();
