@@ -49,18 +49,11 @@ void project_main(void)
 		}
 		if(bBlink_Flag)
 		{
-			uiPort_sel++;
-			switch(uiPort_sel)
-			{
-			case 0:
-				for(int sel=0; sel<4; sel++) {uiFND_Port_Buf[sel] = FND_Port_Table[sel];}
-				break;
-			case 1:
-				for(int sel=0; sel<4; sel++) {uiFND_Port_Buf[sel] = 0xff000000;}
-				break;
-			}
-
-
+			for(int sel=0; sel<4; sel++) {uiFND_Port_Buf[sel] = 0xff000000;}
+		}
+		else
+		{
+			for(int sel=0; sel<4; sel++) {uiFND_Port_Buf[sel] = FND_Port_Table[sel];}
 		}
 	}
 }
