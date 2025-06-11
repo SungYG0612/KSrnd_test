@@ -8,7 +8,7 @@
 /*variable*/
 char Flag = '0';
 unsigned int uiPin_value = 0x0000;
-const int32_t FND_Table[10] = {0x82007d00,0xdb002400,0x1600e900,0x1a00e500,
+const unsigned int FND_Table[10] = {0x82007d00,0xdb002400,0x1600e900,0x1a00e500,
 		0x4b00b400,0x2a00d500,0x2200dd00,0x9b006400,0x0200fd00,0x0a00f500};
 int iNumber_Buf = 0;
 unsigned int uiDisplay_Buf[4] = {};
@@ -72,11 +72,11 @@ void Number_convert(int input_number)		//숫자 변환 함수
 		{
 			if(uiDisplay_Buf[2] == FND_Table[0])					//0번 버퍼가 0이거나 부호가 '-'이고, 1번 버퍼가 0이고, 2번 버퍼가 0이면
 			{
-				uiDisplay_Buf[2] |= 0xff000000;		//2번 FND 미표시
+				uiDisplay_Buf[2] = 0xff000000;		//2번 FND 미표시
 			}
-			uiDisplay_Buf[1] |= 0xff000000;			//1번 FND 미표시
+			uiDisplay_Buf[1] = 0xff000000;			//1번 FND 미표시
 		}
 		if(cNumber_sign == '-') {uiDisplay_Buf[0] = 0x7f008000;}		//0번 FND '-' 표시
-		else {uiDisplay_Buf[0] |= 0xff000000;}							//0번 FND 미표시
+		else {uiDisplay_Buf[0] = 0xff000000;}							//0번 FND 미표시
 	}
 }
