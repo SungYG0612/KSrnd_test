@@ -60,7 +60,7 @@ unsigned int uiPrev_Pin_value = 0;
 /* USER CODE BEGIN EV */
 extern char Flag;
 extern unsigned int uiPin_value;
-extern unsigned int uiDisplay_Data[4];
+extern unsigned int uiDisplay_Buf[4];
 extern char cNumber_sign;
 /* USER CODE END EV */
 
@@ -130,8 +130,7 @@ void SysTick_Handler(void)
 {
   /* USER CODE BEGIN SysTick_IRQn 0 */
 	uiPin_value = GPIOD->IDR;
-	uiPin_value &= 0x7c00;
-	uiPin_value ^= 0x7c00;
+	uiPin_value = (uiPin_value & 0x7c00) ^ 0x7c00;
 	if(uiPin_value && uiPrev_Pin_value != uiPin_value)
 	{
 		Flag = '1';
@@ -139,24 +138,24 @@ void SysTick_Handler(void)
 	uiPrev_Pin_value = uiPin_value;
 
 	//////////////////////////////////////////////////////
-
+	/*FND 출력*/
 	switch(uiFND_sel++)
 	{
 	case 0:
 		GPIOB->BSRR = 0x70008000;
-		GPIOE->BSRR = uiDisplay_Data[0];
+		GPIOE->BSRR = uiDisplay_Buf[0];
 		break;
 	case 1:
 		GPIOB->BSRR = 0xb0004000;
-		GPIOE->BSRR = uiDisplay_Data[1];
+		GPIOE->BSRR = uiDisplay_Buf[1];
 		break;
 	case 2:
 		GPIOB->BSRR = 0xd0002000;
-		GPIOE->BSRR = uiDisplay_Data[2];
+		GPIOE->BSRR = uiDisplay_Buf[2];
 		break;
 	case 3:
 		GPIOB->BSRR = 0xe0001000;
-		GPIOE->BSRR = uiDisplay_Data[3];
+		GPIOE->BSRR = uiDisplay_Buf[3];
 		uiFND_sel = 0;
 		break;
 	}
