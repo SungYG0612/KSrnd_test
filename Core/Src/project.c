@@ -53,10 +53,10 @@ void project_main(void)
 			switch(uiPort_sel)
 			{
 			case 0:
-				for(int sel; sel<4; sel++) {uiFND_Port_Buf[sel] = FND_Port_Table[sel];}
+				for(int sel=0; sel<4; sel++) {uiFND_Port_Buf[sel] = FND_Port_Table[sel];}
 				break;
 			case 1:
-				for(int sel; sel<4; sel++) {uiFND_Port_Buf[sel] = 0xff000000;}
+				for(int sel=0; sel<4; sel++) {uiFND_Port_Buf[sel] = 0xff000000;}
 				break;
 			}
 
@@ -68,6 +68,7 @@ void project_main(void)
 //////////////////////////////////
 void Initialize(void)
 {
+	for(int init_sel=0; init_sel<4; init_sel++) {uiFND_Port_Buf[init_sel] = FND_Port_Table[init_sel];}
 }
 
 void Number_convert(int input_number)		//숫자 변환 함수
