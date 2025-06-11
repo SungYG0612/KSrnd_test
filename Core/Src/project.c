@@ -31,8 +31,8 @@ void project_main(void)
 	{
 		if(Flag=='1')
 		{
-			if(uiPin_value & 0x0400) {iNumber_Data++;}		//1번 버튼 = iNumber_Data 증가
-			if(uiPin_value & 0x1000) {iNumber_Data--;}		//3번 버튼 = iNumber_Data 감소
+			if(uiPin_value & 0x0400) {iNumber_Data--;}		//1번 버튼 = iNumber_Data 증가
+			if(uiPin_value & 0x1000) {iNumber_Data++;}		//3번 버튼 = iNumber_Data 감소
 			if(uiPin_value & 0x4000) {iNumber_Data=0;}		//5번 버튼 = iNumber_Data 0 초기화
 			if(iNumber_Data>9999 || iNumber_Data<-999) {iNumber_Data = 0;}		//iNumber_Data가 9999보다 크고 -999보다 작다면 0으로 초기화
 			Number_convert(iNumber_Data);
