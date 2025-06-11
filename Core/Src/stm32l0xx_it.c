@@ -42,6 +42,7 @@
 /* Private variables ---------------------------------------------------------*/
 /* USER CODE BEGIN PV */
 unsigned int uiFND_sel = 0;
+unsigned int uiPrev_Pin_value = 0;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -131,10 +132,11 @@ void SysTick_Handler(void)
 	uiPin_value = GPIOD->IDR;
 	uiPin_value &= 0x7c00;
 	uiPin_value ^= 0x7c00;
-	if(uiPin_value)
+	if(uiPin_value && uiPrev_Pin_value != uiPin_value)
 	{
 		Flag = '1';
 	}
+	uiPrev_Pin_value = uiPin_value;
 
 	//////////////////////////////////////////////////////
 
