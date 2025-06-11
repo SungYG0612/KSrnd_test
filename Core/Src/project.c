@@ -47,14 +47,6 @@ void project_main(void)
 			Number_convert(iNumber_Buf);
 			bButton_Flag = 0;
 		}
-		if(bBlink_Flag)
-		{
-			for(int sel=0; sel<4; sel++) {uiFND_Port_Buf[sel] = 0xff000000;}
-		}
-		else
-		{
-			for(int sel=0; sel<4; sel++) {uiFND_Port_Buf[sel] = FND_Port_Table[sel];}
-		}
 	}
 }
 

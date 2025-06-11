@@ -59,6 +59,7 @@ unsigned int uiTime = 0;
 /* External variables --------------------------------------------------------*/
 
 /* USER CODE BEGIN EV */
+extern const unsigned int FND_Port_Table[4];
 extern int bButton_Flag;
 extern int bSet_Flag;
 extern int bBlink_Flag;
@@ -143,7 +144,7 @@ void SysTick_Handler(void)
 	/*FND Blink*/
 	if(bSet_Flag == 1)
 	{
-		if(uiTime >= 250)
+		if(uiTime >= 500)
 		{
 			bBlink_Flag ^= 1;
 			uiTime = 0;
@@ -151,6 +152,15 @@ void SysTick_Handler(void)
 		uiTime++;
 	}
 	else {bBlink_Flag = 0;}
+
+	if(bBlink_Flag)
+	{
+		for(int sel=0; sel<4; sel++) {uiFND_Port_Buf[sel] = 0xff000000;}
+	}
+	else
+	{
+		for(int sel=0; sel<4; sel++) {uiFND_Port_Buf[sel] = FND_Port_Table[sel];}
+	}
 	//////////////////////////////////////////////////////
 	/*FND 출력*/
 	switch(uiFND_sel++)
