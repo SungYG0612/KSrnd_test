@@ -13,15 +13,13 @@
 /*variable*/
 int bButton_Flag = 0;
 int bSet_Flag = 0;
-int bBlink_Flag = 0;
-int bSel_Flag = 0;
 
 const unsigned int FND_Number_Table[10] = {0x82007d00,0xdb002400,0x1600e900,0x1a00e500,
 		0x4b00b400,0x2a00d500,0x2200dd00,0x9b006400,0x0200fd00,0x0a00f500};
 const unsigned int FND_Port_Table[4] = {0x70008000, 0xb0004000, 0xd0002000, 0xe0001000};
 
 int iNumber_Buf = 1234;
-unsigned int uiNumber_Buf[4] = {};
+unsigned int uiDisplay_Number_Buf[4] = {};
 unsigned int uiFND_Port_Buf[4] = {0x70008000, 0xb0004000, 0xd0002000, 0xe0001000};
 
 int iBlink_Port_sel = 0;
@@ -141,11 +139,11 @@ void Number_convert(int Input_Data)		//숫자 변환 함수
 		}
 	}
 
-	if(cNumber_sign == '-') {uiNumber_Buf[0] = 0x7f008000;}
-	else {uiNumber_Buf[0] = uiNumber_Data[0];}
-	uiNumber_Buf[1] = uiNumber_Data[1];
-	uiNumber_Buf[2] = uiNumber_Data[2];
-	uiNumber_Buf[3] = uiNumber_Data[3];
+	if(cNumber_sign == '-') {uiDisplay_Number_Buf[0] = 0x7f008000;}
+	else {uiDisplay_Number_Buf[0] = uiNumber_Data[0];}
+	uiDisplay_Number_Buf[1] = uiNumber_Data[1];
+	uiDisplay_Number_Buf[2] = uiNumber_Data[2];
+	uiDisplay_Number_Buf[3] = uiNumber_Data[3];
 }
 
 void Blink_convert(int Input_Data)
