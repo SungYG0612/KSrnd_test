@@ -161,21 +161,15 @@ void SysTick_Handler(void)
 	/*Button Long Key End*/
 	//////////////////////////////////////////////////////
 	/*FND Blink Begin*/
-	switch(bSet_Flag)
+	if(bSet_Flag)
 	{
-	case 0:
-		bBlink_Flag = 0;
-		break;
-	case 1:
 		if(uiBlink_Time >= 400)
 		{
 			bBlink_Flag = 1;
 			uiBlink_Time = 0;
 		}
 		uiBlink_Time++;
-		break;
 	}
-
 	/*FND Blink End*/
 	//////////////////////////////////////////////////////
 	/*FND 출력 Begin*/

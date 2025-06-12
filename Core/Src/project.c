@@ -25,7 +25,7 @@ unsigned int uiDisplay_Number_Buf[4] = {};
 unsigned int uiFND_Port_Buf[4] = {0x70008000, 0xb0004000, 0xd0002000, 0xe0001000};
 
 int iBlink_Port_sel = 0;
-unsigned int uiBlink_sel = 0;
+unsigned int uiBlink_State_Sel = 0;
 unsigned int uiBlink_Time = 0;
 unsigned int uiBlink_Port_Data[4] = {0xf0000000,0xb0004000,0xd0002000,0xe0001000};
 unsigned int uiPin_value = 0x0000;
@@ -62,21 +62,19 @@ void project_main(void)
 				break;
 
 			case Set_Button:
-				iBlink_Port_sel = 0;
-				uiBlink_sel = 0;
-				uiBlink_Time = 0;
-				bSet_Flag ^= 1;
-				Blink_convert(iBlink_Port_sel);
+				iBlink_Port_sel = 0;	//blink 하는 FND 선택 초기화
+				uiBlink_State_Sel = 0;	//blink 상태 초기화(ON or OFF)
+				uiBlink_Time = 0;	//blink flag 만드는 시간 초기화
+				bSet_Flag ^= 1;	//Set Flag 토글
 				break;
 
 			case Sel_Button:
 				if(bSet_Flag)
 				{
-					uiBlink_sel = 1;
+					uiBlink_State_Sel = 1;
 					uiBlink_Time = 0;
 					iBlink_Port_sel++;
 					iBlink_Port_sel %= 4;
-					Blink_convert(iBlink_Port_sel);
 				}
 				break;
 
@@ -97,14 +95,14 @@ void project_main(void)
 		/*Blink 토글*/
 		if(bBlink_Flag)
 		{
-			switch(uiBlink_sel)
+			switch(uiBlink_State_Sel)
 			{
 			case 0:
 				uiFND_Port_Buf[0]=FND_Port_Table[0];
 				uiFND_Port_Buf[1]=FND_Port_Table[1];
 				uiFND_Port_Buf[2]=FND_Port_Table[2];
 				uiFND_Port_Buf[3]=FND_Port_Table[3];
-				uiBlink_sel = 1;
+				uiBlink_State_Sel = 1;
 				break;
 			case 1:
 				for(int sel=0; sel<4; sel++)
@@ -118,7 +116,7 @@ void project_main(void)
 						uiFND_Port_Buf[sel] = FND_Port_Table[sel];
 					}
 				}
-				uiBlink_sel = 0;
+				uiBlink_State_Sel = 0;
 				break;
 			}
 			bBlink_Flag = 0;
@@ -189,24 +187,4 @@ void Number_convert(int Input_Data)		//숫자 변환 함수
 /*Blink FND 변경*/
 void Blink_convert(int Input_Sel_Data)
 {
-	switch(bSet_Flag) //bSet_Flag가 1일때(blink 중일때)만 작동
-	{
-	case 0:
-		for(int sel=0; sel<4; sel++) {uiFND_Port_Buf[sel] = FND_Port_Table[sel];}
-		break;
-	case 1:
-		for(int sel=0; sel<4; sel++)
-		{
-			if(sel == Input_Sel_Data)
-			{
-				uiBlink_Port_Data[sel] = 0xf0000000;
-			}
-			else
-			{
-				uiBlink_Port_Data[sel] = FND_Port_Table[sel];
-			}
-		}
-		break;
-	}
-
 }
