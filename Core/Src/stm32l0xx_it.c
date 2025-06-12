@@ -41,10 +41,8 @@
 
 /* Private variables ---------------------------------------------------------*/
 /* USER CODE BEGIN PV */
- int bBlink_Flag = 0;
 unsigned int uiFND_sel = 0;
 unsigned int uiPrev_Pin_value = 0;
-unsigned int uiTime = 0;
 
 /* USER CODE END PV */
 
@@ -64,7 +62,9 @@ unsigned int uiTime = 0;
 extern const unsigned int FND_Port_Table[4];
 extern int bButton_Flag;
 extern int bSet_Flag;
+extern int bBlink_Flag;
 extern unsigned int uiPin_value;
+extern unsigned int uiBlink_Time;
 extern unsigned int uiBlink_Port_Data[4];
 extern unsigned int uiDisplay_Number_Buf[4];
 extern unsigned int uiFND_Port_Buf[4];
@@ -150,12 +150,12 @@ void SysTick_Handler(void)
 		bBlink_Flag = 0;
 		break;
 	case 1:
-		if(uiTime >= 500)
+		if(uiBlink_Time >= 400)
 		{
 			bBlink_Flag ^= 1;
-			uiTime = 0;
+			uiBlink_Time = 0;
 		}
-		uiTime++;
+		uiBlink_Time++;
 		break;
 	}
 

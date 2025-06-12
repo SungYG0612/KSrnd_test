@@ -13,6 +13,7 @@
 /*variable*/
 int bButton_Flag = 0;
 int bSet_Flag = 0;
+int bBlink_Flag = 0;
 
 const unsigned int FND_Number_Table[10] = {0x82007d00,0xdb002400,0x1600e900,0x1a00e500,
 		0x4b00b400,0x2a00d500,0x2200dd00,0x9b006400,0x0200fd00,0x0a00f500};
@@ -23,6 +24,7 @@ unsigned int uiDisplay_Number_Buf[4] = {};
 unsigned int uiFND_Port_Buf[4] = {0x70008000, 0xb0004000, 0xd0002000, 0xe0001000};
 
 int iBlink_Port_sel = 0;
+unsigned int uiBlink_Time = 0;
 unsigned int uiBlink_Port_Data[4] = {0xf0000000,0xb0004000,0xd0002000,0xe0001000};
 unsigned int uiPin_value = 0x0000;
 char cNumber_sign;
@@ -66,9 +68,11 @@ void project_main(void)
 			case Sel_Button:
 				if(bSet_Flag)
 				{
-				iBlink_Port_sel++;
-				iBlink_Port_sel %= 4;
-				Blink_convert(iBlink_Port_sel);
+					uiBlink_Time = 0;
+					bBlink_Flag = 0;
+					iBlink_Port_sel++;
+					iBlink_Port_sel %= 4;
+					Blink_convert(iBlink_Port_sel);
 				}
 				break;
 
@@ -106,12 +110,6 @@ void Number_convert(int Input_Data)		//숫자 변환 함수
 	else if(Input_Data >= 100){uiNumber_len=1;}
 	else if(Input_Data >= 10){uiNumber_len=2;}
 	else{uiNumber_len=3;}
-
-
-
-
-
-
 
 	for(int sel=0; sel<4; sel++)
 	{
