@@ -60,19 +60,21 @@ void project_main(void)
 				break;
 
 			case Set_Button:
+				bBlink_Flag = 1;
 				iBlink_Port_sel = 0;
 				Blink_convert(iBlink_Port_sel);
+				uiBlink_Time = 0;
 				bSet_Flag ^= 1;
 				break;
 
 			case Sel_Button:
 				if(bSet_Flag)
 				{
-					uiBlink_Time = 0;
-					bBlink_Flag = 0;
 					iBlink_Port_sel++;
 					iBlink_Port_sel %= 4;
 					Blink_convert(iBlink_Port_sel);
+					uiBlink_Time = 0;
+					bBlink_Flag = 1;
 				}
 				break;
 
