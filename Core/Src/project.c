@@ -30,6 +30,7 @@ unsigned int uiBlink_Time = 0;
 unsigned int uiBlink_Port_Data[4] = {0xf0000000,0xb0004000,0xd0002000,0xe0001000};
 unsigned int uiPin_value = 0x0000;
 char cNumber_sign;
+unsigned int uiLong_Key_Data = 0;
 //////////////////////////////////
 void Initialize(void);
 void Number_convert(int);
@@ -93,8 +94,22 @@ void project_main(void)
 
 		if(bLong_Key_Flag)
 		{
-			iNumber_Buf = 1234;
-			Number_convert(iNumber_Buf);
+			switch(uiLong_Key_Data)
+			{
+			case 1:
+				iNumber_Buf = 1234;
+				Number_convert(iNumber_Buf);
+				break;
+			case 2:
+				break;
+			case 3:
+				break;
+			case 4:
+				break;
+			case 5:
+				break;
+			}
+			uiLong_Key_Data = 0;
 			bLong_Key_Flag = 0;
 		}
 		/*Blink 토글*/

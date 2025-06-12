@@ -70,6 +70,7 @@ extern unsigned int uiBlink_Time;
 extern unsigned int uiBlink_Port_Data[4];
 extern unsigned int uiDisplay_Number_Buf[4];
 extern unsigned int uiFND_Port_Buf[4];
+extern unsigned int uiLong_Key_Data;
 /* USER CODE END EV */
 
 /******************************************************************************/
@@ -143,8 +144,8 @@ void SysTick_Handler(void)
 	if(uiPin_value)
 	{
 		if(!uiPrev_Pin_value){bButton_Flag = 1;}
-		else if(uiPrev_Pin_value == uiPin_value){uiLong_Key_Time ++;}
-		else {uiLong_Key_Time = 0;}
+		else if(uiPrev_Pin_value == uiPin_value && uiLong_Key_Time<1000){uiLong_Key_Time ++;}
+		else if(uiPrev_Pin_value && uiPrev_Pin_value != uiPin_value){uiLong_Key_Time = 0;}
 	}
 	else
 	{
@@ -157,13 +158,27 @@ void SysTick_Handler(void)
 	if(uiLong_Key_Time >= 1000)
 	{
 		bLong_Key_Flag = 1;
+		switch(uiPin_value)
+		{
+		case 0x4000:
+			uiLong_Key_Data = 1;
+			break;
+		case 0x2000:
+			break;
+		case 0x1000:
+			break;
+		case 0x0800:
+			break;
+		case 0x0400:
+			break;
+		}
 	}
 	/*Button Long Key End*/
 	//////////////////////////////////////////////////////
 	/*FND Blink Begin*/
 	if(bSet_Flag)
 	{
-		if(uiBlink_Time >= 400)
+		if(uiBlink_Time >= 200)
 		{
 			bBlink_Flag = 1;
 			uiBlink_Time = 0;
