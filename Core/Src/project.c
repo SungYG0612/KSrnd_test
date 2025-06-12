@@ -3,6 +3,11 @@
 
 //////////////////////////////////
 /*define*/
+#define Down_Button 0x0400
+#define Set_Button 0x0800
+#define Up_Button 0x1000
+#define Sel_Button 0x2000
+#define Reset_Button 0x4000
 
 //////////////////////////////////
 /*variable*/
@@ -17,15 +22,15 @@ const unsigned int FND_Port_Table[4] = {0x70008000, 0xb0004000, 0xd0002000, 0xe0
 
 int iNumber_Buf = 1234;
 unsigned int uiDisplay_Buf[4] = {};
-unsigned int uiFND_Port_Buf[4] = {0x70008000, 0xb0004000, 0xd0002000, 0xe0001000};
 
-unsigned int uiPort_sel = 0;
-unsigned int uiFND_Port_Data[4] = {0x70008000,0xff000000,0xff000000,0xff000000};
+int iBlink_Port_sel = 3;
+unsigned int uiBlink_Port_Data[4] = {0xf0000000,0xf0000000,0xf0000000,0xe0001000};
 unsigned int uiPin_value = 0x0000;
 char cNumber_sign;
 //////////////////////////////////
 void Initialize(void);
 void Number_convert(int);
+void Blink_convert(int);
 
 //////////////////////////////////
 void project_initialization(void)
@@ -41,18 +46,29 @@ void project_main(void)
 	{
 		if(bButton_Flag)
 		{
-			if(uiPin_value == 0x0400) {iNumber_Buf--;}		//1번 버튼 = iNumber_Buf 증가
-			if(uiPin_value == 0x0800) {bSet_Flag ^= 1;}		//2번 버튼 = Setting 버튼 > LED Blink
-			if(uiPin_value == 0x1000) {iNumber_Buf++;}		//3번 버튼 = iNumber_Buf 감소
-			if(uiPin_value == 0x2000) {bSel_Flag = 1;}
-			if(uiPin_value == 0x4000) {iNumber_Buf=0;}		//5번 버튼 = iNumber_Buf 0 초기화
-			if(iNumber_Buf>9999 || iNumber_Buf<-999) {iNumber_Buf = 0;}		//iNumber_Buf가 9999보다 크고 -999보다 작다면 0으로 초기화
-			Number_convert(iNumber_Buf);
+			if(uiPin_value == Down_Button)
+			{
+				iNumber_Buf--;
+				Number_convert(iNumber_Buf);
+			}
+			if(uiPin_value == Set_Button) {bSet_Flag ^= 1;}
+			if(uiPin_value == Up_Button)
+			{
+				iNumber_Buf++;
+				Number_convert(iNumber_Buf);
+			}
+			if(uiPin_value == Sel_Button)
+			{
+				iBlink_Port_sel--;
+				if(iBlink_Port_sel < 0) {iBlink_Port_sel = 3;}
+				Blink_convert(iBlink_Port_sel);
+			}
+			if(uiPin_value == Reset_Button)
+			{
+				iNumber_Buf=0;
+				Number_convert(iNumber_Buf);
+			}
 			bButton_Flag = 0;
-		}
-		if(bSel_Flag)
-		{
-			uiPort_sel++;
 		}
 	}
 }
@@ -63,44 +79,45 @@ void Initialize(void)
 
 }
 
-void Number_convert(int input_number)		//숫자 변환 함수
+void Number_convert(int Input_Data)		//숫자 변환 함수
 {
 	unsigned int uiNumber_state[4] = {};
+	if(Input_Data>9999 || Input_Data<-999) {Input_Data = 0;}		//Input_Data가 9999보다 크고 -999보다 작다면 0으로 초기화
 	//양수 음수 확인 Code
-	if(input_number<0)		//iNumber_Buf가 음수일 경우
+	if(Input_Data<0)		//iNumber_Buf가 음수일 경우
 	{
-		input_number *= -1;		//음수 X -1로 양수로 변환
+		Input_Data *= -1;		//음수 X -1로 양수로 변환
 		cNumber_sign = '-';
 	}
 	else {cNumber_sign = '+';}
 
-	if(input_number >= 1000)
+	if(Input_Data >= 1000)
 	{
-		uiNumber_state[0] = FND_Number_Table[input_number / 1000];
-		uiNumber_state[1] = FND_Number_Table[(input_number % 1000) / 100];
-		uiNumber_state[2] = FND_Number_Table[(input_number % 100) / 10];
-		uiNumber_state[3] = FND_Number_Table[input_number % 10];
+		uiNumber_state[0] = FND_Number_Table[Input_Data / 1000];
+		uiNumber_state[1] = FND_Number_Table[(Input_Data % 1000) / 100];
+		uiNumber_state[2] = FND_Number_Table[(Input_Data % 100) / 10];
+		uiNumber_state[3] = FND_Number_Table[Input_Data % 10];
 	}
-	else if(input_number >= 100)
+	else if(Input_Data >= 100)
 	{
 		uiNumber_state[0] = 0xff000000;
-		uiNumber_state[1] = FND_Number_Table[(input_number % 1000) / 100];
-		uiNumber_state[2] = FND_Number_Table[(input_number % 100) / 10];
-		uiNumber_state[3] = FND_Number_Table[input_number % 10];
+		uiNumber_state[1] = FND_Number_Table[(Input_Data % 1000) / 100];
+		uiNumber_state[2] = FND_Number_Table[(Input_Data % 100) / 10];
+		uiNumber_state[3] = FND_Number_Table[Input_Data % 10];
 	}
-	else if(input_number >= 10)
+	else if(Input_Data >= 10)
 	{
 		uiNumber_state[0] = 0xff000000;
 		uiNumber_state[1] = 0xff000000;
-		uiNumber_state[2] = FND_Number_Table[(input_number % 100) / 10];
-		uiNumber_state[3] = FND_Number_Table[input_number % 10];
+		uiNumber_state[2] = FND_Number_Table[(Input_Data % 100) / 10];
+		uiNumber_state[3] = FND_Number_Table[Input_Data % 10];
 	}
 	else
 	{
 		uiNumber_state[0] = 0xff000000;
 		uiNumber_state[1] = 0xff000000;
 		uiNumber_state[2] = 0xff000000;
-		uiNumber_state[3] = FND_Number_Table[input_number % 10];
+		uiNumber_state[3] = FND_Number_Table[Input_Data % 10];
 	}
 
 	if(cNumber_sign == '-') {uiDisplay_Buf[0] = 0x7f008000;}
@@ -110,3 +127,17 @@ void Number_convert(int input_number)		//숫자 변환 함수
 	uiDisplay_Buf[3] = uiNumber_state[3];
 }
 
+void Blink_convert(int Input_Data)
+{
+	for(int sel=3; sel>=0; sel--)
+	{
+		if(sel == iBlink_Port_sel)
+		{
+			uiBlink_Port_Data[sel] = FND_Port_Table[sel];
+		}
+		else
+		{
+			uiBlink_Port_Data[sel] = 0xf0000000;
+		}
+	}
+}
