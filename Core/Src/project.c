@@ -63,18 +63,23 @@ void project_main(void)
 
 			case Set_Button:
 				iBlink_Port_sel = 0;	//blink 하는 FND 선택 초기화
+				Blink_convert(iBlink_Port_sel);
 				uiBlink_State_Sel = 0;	//blink 상태 초기화(ON or OFF)
 				uiBlink_Time = 0;	//blink flag 만드는 시간 초기화
 				bSet_Flag ^= 1;	//Set Flag 토글
+				if(bSet_Flag) {uiBlink_State_Sel = 1;}
+				bBlink_Flag = 1;
 				break;
 
 			case Sel_Button:
 				if(bSet_Flag)
 				{
-					uiBlink_State_Sel = 1;
-					uiBlink_Time = 0;
 					iBlink_Port_sel++;
 					iBlink_Port_sel %= 4;
+					Blink_convert(iBlink_Port_sel);
+					uiBlink_State_Sel = 1;
+					uiBlink_Time = 0;
+					bBlink_Flag = 1;
 				}
 				break;
 
@@ -105,17 +110,10 @@ void project_main(void)
 				uiBlink_State_Sel = 1;
 				break;
 			case 1:
-				for(int sel=0; sel<4; sel++)
-				{
-					if(sel == iBlink_Port_sel)
-					{
-						uiFND_Port_Buf[sel] = 0xf0000000;
-					}
-					else
-					{
-						uiFND_Port_Buf[sel] = FND_Port_Table[sel];
-					}
-				}
+				uiFND_Port_Buf[0]=uiBlink_Port_Data[0];
+				uiFND_Port_Buf[1]=uiBlink_Port_Data[1];
+				uiFND_Port_Buf[2]=uiBlink_Port_Data[2];
+				uiFND_Port_Buf[3]=uiBlink_Port_Data[3];
 				uiBlink_State_Sel = 0;
 				break;
 			}
@@ -187,4 +185,15 @@ void Number_convert(int Input_Data)		//숫자 변환 함수
 /*Blink FND 변경*/
 void Blink_convert(int Input_Sel_Data)
 {
+	for(int sel=0; sel<4; sel++)
+	{
+		if(sel==Input_Sel_Data)
+		{
+			uiBlink_Port_Data[sel] = 0xf0000000;
+		}
+		else
+		{
+			uiBlink_Port_Data[sel] = FND_Port_Table[sel];
+		}
+	}
 }
