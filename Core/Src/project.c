@@ -22,9 +22,10 @@ const unsigned int FND_Port_Table[4] = {0x70008000, 0xb0004000, 0xd0002000, 0xe0
 
 int iNumber_Buf = 1234;
 unsigned int uiDisplay_Buf[4] = {};
+unsigned int uiFND_Port_Buf[4] = {0x70008000, 0xb0004000, 0xd0002000, 0xe0001000};
 
-int iBlink_Port_sel = 3;
-unsigned int uiBlink_Port_Data[4] = {0xf0000000,0xf0000000,0xf0000000,0xe0001000};
+int iBlink_Port_sel = 0;
+unsigned int uiBlink_Port_Data[4] = {0xf0000000,0xb0004000,0xd0002000,0xe0001000};
 unsigned int uiPin_value = 0x0000;
 char cNumber_sign;
 //////////////////////////////////
@@ -59,8 +60,8 @@ void project_main(void)
 			}
 			if(uiPin_value == Sel_Button)
 			{
-				iBlink_Port_sel--;
-				if(iBlink_Port_sel < 0) {iBlink_Port_sel = 3;}
+				iBlink_Port_sel++;
+				iBlink_Port_sel %= 4;
 				Blink_convert(iBlink_Port_sel);
 			}
 			if(uiPin_value == Reset_Button)
@@ -76,7 +77,8 @@ void project_main(void)
 //////////////////////////////////
 void Initialize(void)
 {
-
+	Number_convert(iNumber_Buf);
+	for(int sel=0; sel<4; sel++) {uiFND_Port_Buf[sel] = FND_Port_Table[sel];}
 }
 
 void Number_convert(int Input_Data)		//숫자 변환 함수
@@ -129,15 +131,15 @@ void Number_convert(int Input_Data)		//숫자 변환 함수
 
 void Blink_convert(int Input_Data)
 {
-	for(int sel=3; sel>=0; sel--)
+	for(int sel=0; sel<4; sel++)
 	{
-		if(sel == iBlink_Port_sel)
+		if(sel == Input_Data)
 		{
-			uiBlink_Port_Data[sel] = FND_Port_Table[sel];
+			uiBlink_Port_Data[sel] = 0xf0000000;
 		}
 		else
 		{
-			uiBlink_Port_Data[sel] = 0xf0000000;
+			uiBlink_Port_Data[sel] = FND_Port_Table[sel];
 		}
 	}
 }

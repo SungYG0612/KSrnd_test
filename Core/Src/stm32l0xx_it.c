@@ -44,7 +44,7 @@
 unsigned int uiFND_sel = 0;
 unsigned int uiPrev_Pin_value = 0;
 unsigned int uiTime = 0;
-unsigned int uiFND_Port_Buf[4] = {0x70008000, 0xb0004000, 0xd0002000, 0xe0001000};
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -67,6 +67,7 @@ extern int bBlink_Flag;
 extern unsigned int uiPin_value;
 extern unsigned int uiBlink_Port_Data[4];
 extern unsigned int uiDisplay_Buf[4];
+extern unsigned int uiFND_Port_Buf[4];
 /* USER CODE END EV */
 
 /******************************************************************************/
