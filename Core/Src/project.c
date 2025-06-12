@@ -14,16 +14,18 @@
 int bButton_Flag = 0;
 int bSet_Flag = 0;
 int bBlink_Flag = 0;
+int bLong_Key_Flag = 0;
 
 const unsigned int FND_Number_Table[10] = {0x82007d00,0xdb002400,0x1600e900,0x1a00e500,
 		0x4b00b400,0x2a00d500,0x2200dd00,0x9b006400,0x0200fd00,0x0a00f500};
 const unsigned int FND_Port_Table[4] = {0x70008000, 0xb0004000, 0xd0002000, 0xe0001000};
 
-int iNumber_Buf = 1234;
+int iNumber_Buf = 0;
 unsigned int uiDisplay_Number_Buf[4] = {};
 unsigned int uiFND_Port_Buf[4] = {0x70008000, 0xb0004000, 0xd0002000, 0xe0001000};
 
 int iBlink_Port_sel = 0;
+unsigned int uiBlink_sel = 0;
 unsigned int uiBlink_Time = 0;
 unsigned int uiBlink_Port_Data[4] = {0xf0000000,0xb0004000,0xd0002000,0xe0001000};
 unsigned int uiPin_value = 0x0000;
@@ -60,21 +62,21 @@ void project_main(void)
 				break;
 
 			case Set_Button:
-				bBlink_Flag = 1;
 				iBlink_Port_sel = 0;
-				Blink_convert(iBlink_Port_sel);
+				uiBlink_sel = 0;
 				uiBlink_Time = 0;
 				bSet_Flag ^= 1;
+				Blink_convert(iBlink_Port_sel);
 				break;
 
 			case Sel_Button:
 				if(bSet_Flag)
 				{
+					uiBlink_sel = 1;
+					uiBlink_Time = 0;
 					iBlink_Port_sel++;
 					iBlink_Port_sel %= 4;
 					Blink_convert(iBlink_Port_sel);
-					uiBlink_Time = 0;
-					bBlink_Flag = 1;
 				}
 				break;
 
@@ -85,16 +87,53 @@ void project_main(void)
 			}
 			bButton_Flag = 0;
 		}
+
+		if(bLong_Key_Flag)
+		{
+			iNumber_Buf = 1234;
+			Number_convert(iNumber_Buf);
+			bLong_Key_Flag = 0;
+		}
+		/*Blink 토글*/
+		if(bBlink_Flag)
+		{
+			switch(uiBlink_sel)
+			{
+			case 0:
+				uiFND_Port_Buf[0]=FND_Port_Table[0];
+				uiFND_Port_Buf[1]=FND_Port_Table[1];
+				uiFND_Port_Buf[2]=FND_Port_Table[2];
+				uiFND_Port_Buf[3]=FND_Port_Table[3];
+				uiBlink_sel = 1;
+				break;
+			case 1:
+				for(int sel=0; sel<4; sel++)
+				{
+					if(sel == iBlink_Port_sel)
+					{
+						uiFND_Port_Buf[sel] = 0xf0000000;
+					}
+					else
+					{
+						uiFND_Port_Buf[sel] = FND_Port_Table[sel];
+					}
+				}
+				uiBlink_sel = 0;
+				break;
+			}
+			bBlink_Flag = 0;
+		}
 	}
 }
 
-//////////////////////////////////
+/////////////////////////////////////////////////
 void Initialize(void)
 {
 	Number_convert(iNumber_Buf);
 	for(int sel=0; sel<4; sel++) {uiFND_Port_Buf[sel] = FND_Port_Table[sel];}
 }
 
+/////////////////////////////////////////////////
 void Number_convert(int Input_Data)		//숫자 변환 함수
 {
 	unsigned int uiNumber_Data[4] = {};
@@ -146,17 +185,28 @@ void Number_convert(int Input_Data)		//숫자 변환 함수
 	uiDisplay_Number_Buf[3] = uiNumber_Data[3];
 }
 
-void Blink_convert(int Input_Data)
+///////////////////////////////////////////////////////
+/*Blink FND 변경*/
+void Blink_convert(int Input_Sel_Data)
 {
-	for(int sel=0; sel<4; sel++)
+	switch(bSet_Flag) //bSet_Flag가 1일때(blink 중일때)만 작동
 	{
-		if(sel == Input_Data)
+	case 0:
+		for(int sel=0; sel<4; sel++) {uiFND_Port_Buf[sel] = FND_Port_Table[sel];}
+		break;
+	case 1:
+		for(int sel=0; sel<4; sel++)
 		{
-			uiBlink_Port_Data[sel] = 0xf0000000;
+			if(sel == Input_Sel_Data)
+			{
+				uiBlink_Port_Data[sel] = 0xf0000000;
+			}
+			else
+			{
+				uiBlink_Port_Data[sel] = FND_Port_Table[sel];
+			}
 		}
-		else
-		{
-			uiBlink_Port_Data[sel] = FND_Port_Table[sel];
-		}
+		break;
 	}
+
 }
