@@ -47,32 +47,37 @@ void project_main(void)
 	{
 		if(bButton_Flag)
 		{
-			if(uiPin_value == Down_Button)
+			switch(uiPin_value)
 			{
+			case Up_Button:
+				iNumber_Buf++;
+				Number_convert(iNumber_Buf);
+				break;
+
+			case Down_Button:
 				iNumber_Buf--;
 				Number_convert(iNumber_Buf);
-			}
-			if(uiPin_value == Set_Button)
-			{
+				break;
+
+			case Set_Button:
 				iBlink_Port_sel = 0;
 				Blink_convert(iBlink_Port_sel);
 				bSet_Flag ^= 1;
-			}
-			if(uiPin_value == Up_Button)
-			{
-				iNumber_Buf++;
-				Number_convert(iNumber_Buf);
-			}
-			if(uiPin_value == Sel_Button && bSet_Flag)
-			{
+				break;
+
+			case Sel_Button:
+				if(bSet_Flag)
+				{
 				iBlink_Port_sel++;
 				iBlink_Port_sel %= 4;
 				Blink_convert(iBlink_Port_sel);
-			}
-			if(uiPin_value == Reset_Button)
-			{
+				}
+				break;
+
+			case Reset_Button:
 				iNumber_Buf=0;
 				Number_convert(iNumber_Buf);
+				break;
 			}
 			bButton_Flag = 0;
 		}
