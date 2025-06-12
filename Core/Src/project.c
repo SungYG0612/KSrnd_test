@@ -52,13 +52,18 @@ void project_main(void)
 				iNumber_Buf--;
 				Number_convert(iNumber_Buf);
 			}
-			if(uiPin_value == Set_Button) {bSet_Flag ^= 1;}
+			if(uiPin_value == Set_Button)
+			{
+				iBlink_Port_sel = 0;
+				Blink_convert(iBlink_Port_sel);
+				bSet_Flag ^= 1;
+			}
 			if(uiPin_value == Up_Button)
 			{
 				iNumber_Buf++;
 				Number_convert(iNumber_Buf);
 			}
-			if(uiPin_value == Sel_Button)
+			if(uiPin_value == Sel_Button && bSet_Flag)
 			{
 				iBlink_Port_sel++;
 				iBlink_Port_sel %= 4;
