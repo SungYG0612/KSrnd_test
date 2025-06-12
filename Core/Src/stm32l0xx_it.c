@@ -66,7 +66,7 @@ extern int bSet_Flag;
 extern int bBlink_Flag;
 extern unsigned int uiPin_value;
 extern unsigned int uiBlink_Port_Data[4];
-extern unsigned int uiDisplay_Buf[4];
+extern unsigned int uiNumber_Buf[4];
 extern unsigned int uiFND_Port_Buf[4];
 /* USER CODE END EV */
 
@@ -169,19 +169,19 @@ void SysTick_Handler(void)
 	{
 	case 0:
 		GPIOB->BSRR = uiFND_Port_Buf[0];
-		GPIOE->BSRR = uiDisplay_Buf[0];
+		GPIOE->BSRR = uiNumber_Buf[0];
 		break;
 	case 1:
 		GPIOB->BSRR = uiFND_Port_Buf[1];
-		GPIOE->BSRR = uiDisplay_Buf[1];
+		GPIOE->BSRR = uiNumber_Buf[1];
 		break;
 	case 2:
 		GPIOB->BSRR = uiFND_Port_Buf[2];
-		GPIOE->BSRR = uiDisplay_Buf[2];
+		GPIOE->BSRR = uiNumber_Buf[2];
 		break;
 	case 3:
 		GPIOB->BSRR = uiFND_Port_Buf[3];
-		GPIOE->BSRR = uiDisplay_Buf[3];
+		GPIOE->BSRR = uiNumber_Buf[3];
 		uiFND_sel = 0;
 		break;
 	}

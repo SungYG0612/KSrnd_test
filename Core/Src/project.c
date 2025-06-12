@@ -21,7 +21,7 @@ const unsigned int FND_Number_Table[10] = {0x82007d00,0xdb002400,0x1600e900,0x1a
 const unsigned int FND_Port_Table[4] = {0x70008000, 0xb0004000, 0xd0002000, 0xe0001000};
 
 int iNumber_Buf = 1234;
-unsigned int uiDisplay_Buf[4] = {};
+unsigned int uiNumber_Buf[4] = {};
 unsigned int uiFND_Port_Buf[4] = {0x70008000, 0xb0004000, 0xd0002000, 0xe0001000};
 
 int iBlink_Port_sel = 0;
@@ -93,7 +93,8 @@ void Initialize(void)
 
 void Number_convert(int Input_Data)		//숫자 변환 함수
 {
-	unsigned int uiNumber_state[4] = {};
+	unsigned int uiNumber_Data[4] = {};
+	unsigned int uiNumber_len = 0;
 	if(Input_Data>9999 || Input_Data<-999) {Input_Data = 0;}		//Input_Data가 9999보다 크고 -999보다 작다면 0으로 초기화
 	//양수 음수 확인 Code
 	if(Input_Data<0)		//iNumber_Buf가 음수일 경우
@@ -103,40 +104,48 @@ void Number_convert(int Input_Data)		//숫자 변환 함수
 	}
 	else {cNumber_sign = '+';}
 
-	if(Input_Data >= 1000)
+	if(Input_Data >= 1000){uiNumber_len=0;}
+	else if(Input_Data >= 100){uiNumber_len=1;}
+	else if(Input_Data >= 10){uiNumber_len=2;}
+	else{uiNumber_len=3;}
+
+
+
+
+
+
+
+	for(int sel=0; sel<4; sel++)
 	{
-		uiNumber_state[0] = FND_Number_Table[Input_Data / 1000];
-		uiNumber_state[1] = FND_Number_Table[(Input_Data % 1000) / 100];
-		uiNumber_state[2] = FND_Number_Table[(Input_Data % 100) / 10];
-		uiNumber_state[3] = FND_Number_Table[Input_Data % 10];
-	}
-	else if(Input_Data >= 100)
-	{
-		uiNumber_state[0] = 0xff000000;
-		uiNumber_state[1] = FND_Number_Table[(Input_Data % 1000) / 100];
-		uiNumber_state[2] = FND_Number_Table[(Input_Data % 100) / 10];
-		uiNumber_state[3] = FND_Number_Table[Input_Data % 10];
-	}
-	else if(Input_Data >= 10)
-	{
-		uiNumber_state[0] = 0xff000000;
-		uiNumber_state[1] = 0xff000000;
-		uiNumber_state[2] = FND_Number_Table[(Input_Data % 100) / 10];
-		uiNumber_state[3] = FND_Number_Table[Input_Data % 10];
-	}
-	else
-	{
-		uiNumber_state[0] = 0xff000000;
-		uiNumber_state[1] = 0xff000000;
-		uiNumber_state[2] = 0xff000000;
-		uiNumber_state[3] = FND_Number_Table[Input_Data % 10];
+		if(sel<uiNumber_len)
+		{
+			uiNumber_Data[sel] = 0xff000000;
+		}
+		else
+		{
+			switch(sel)
+			{
+			case 0:
+				uiNumber_Data[0] = FND_Number_Table[Input_Data / 1000];
+				break;
+			case 1:
+				uiNumber_Data[1] = FND_Number_Table[(Input_Data % 1000) / 100];
+				break;
+			case 2:
+				uiNumber_Data[2] = FND_Number_Table[(Input_Data % 100) / 10];
+				break;
+			case 3:
+				uiNumber_Data[3] = FND_Number_Table[Input_Data % 10];
+				break;
+			}
+		}
 	}
 
-	if(cNumber_sign == '-') {uiDisplay_Buf[0] = 0x7f008000;}
-	else {uiDisplay_Buf[0] = uiNumber_state[0];}
-	uiDisplay_Buf[1] = uiNumber_state[1];
-	uiDisplay_Buf[2] = uiNumber_state[2];
-	uiDisplay_Buf[3] = uiNumber_state[3];
+	if(cNumber_sign == '-') {uiNumber_Buf[0] = 0x7f008000;}
+	else {uiNumber_Buf[0] = uiNumber_Data[0];}
+	uiNumber_Buf[1] = uiNumber_Data[1];
+	uiNumber_Buf[2] = uiNumber_Data[2];
+	uiNumber_Buf[3] = uiNumber_Data[3];
 }
 
 void Blink_convert(int Input_Data)
