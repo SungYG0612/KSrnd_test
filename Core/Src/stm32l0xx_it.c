@@ -155,11 +155,7 @@ void SysTick_Handler(void)
 	/*Button Input Interrupt End*/
 	//////////////////////////////////////////////////////
 	/*Button Short, Long Key Begin*/
-	if(uiKey_Time < 1000)
-	{
-
-	}
-	else if(uiKey_Time >= 1000)
+	if(uiKey_Time >= 1000)
 	{
 		bLong_Key_Flag = 1;
 		switch(uiPin_value)
@@ -168,12 +164,16 @@ void SysTick_Handler(void)
 			uiLong_Key_Data = 1;
 			break;
 		case 0x2000:
+
 			break;
 		case 0x1000:
+			uiLong_Key_Data = 3;
 			break;
 		case 0x0800:
+
 			break;
 		case 0x0400:
+			uiLong_Key_Data = 5;
 			break;
 		}
 	}
@@ -192,7 +192,10 @@ void SysTick_Handler(void)
 	/*FND Blink End*/
 	//////////////////////////////////////////////////////
 	/*연속 증감*/
-
+	if(bLong_Key_Flag)
+	{
+		/
+	}
 	//////////////////////////////////////////////////////
 	/*FND 출력 Begin*/
 	switch(uiFND_sel)

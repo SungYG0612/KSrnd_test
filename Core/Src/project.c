@@ -20,7 +20,8 @@ const unsigned int FND_Number_Table[10] = {0x82007d00,0xdb002400,0x1600e900,0x1a
 		0x4b00b400,0x2a00d500,0x2200dd00,0x9b006400,0x0200fd00,0x0a00f500};
 const unsigned int FND_Port_Table[4] = {0x70008000, 0xb0004000, 0xd0002000, 0xe0001000};
 
-int iNumber_Buf = 0;
+int iNumber = 0;
+int iNumber_list[4] = {};
 unsigned int uiDisplay_Number_Buf[4] = {};
 unsigned int uiFND_Port_Buf[4] = {0x70008000, 0xb0004000, 0xd0002000, 0xe0001000};
 
@@ -53,13 +54,13 @@ void project_main(void)
 			switch(uiPin_value)
 			{
 			case Up_Button:
-				iNumber_Buf++;
-				Number_convert(iNumber_Buf);
+				iNumber++;
+				Number_convert(iNumber);
 				break;
 
 			case Down_Button:
-				iNumber_Buf--;
-				Number_convert(iNumber_Buf);
+				iNumber--;
+				Number_convert(iNumber);
 				break;
 
 			case Set_Button:
@@ -85,8 +86,8 @@ void project_main(void)
 				break;
 
 			case Reset_Button:
-				iNumber_Buf=0;
-				Number_convert(iNumber_Buf);
+				iNumber=0;
+				Number_convert(iNumber);
 				break;
 			}
 			bButton_Flag = 0;
@@ -97,8 +98,8 @@ void project_main(void)
 			switch(uiLong_Key_Data)
 			{
 			case 1:
-				iNumber_Buf = 1234;
-				Number_convert(iNumber_Buf);
+				iNumber = 1234;
+				Number_convert(iNumber);
 				break;
 			case 2:
 				break;
@@ -140,7 +141,7 @@ void project_main(void)
 /////////////////////////////////////////////////
 void Initialize(void)
 {
-	Number_convert(iNumber_Buf);
+	Number_convert(iNumber);
 	for(int sel=0; sel<4; sel++) {uiFND_Port_Buf[sel] = FND_Port_Table[sel];}
 }
 
@@ -151,7 +152,7 @@ void Number_convert(int Input_Data)		//숫자 변환 함수
 	unsigned int uiNumber_len = 0;
 	if(Input_Data>9999 || Input_Data<-999) {Input_Data = 0;}		//Input_Data가 9999보다 크고 -999보다 작다면 0으로 초기화
 	//양수 음수 확인 Code
-	if(Input_Data<0)		//iNumber_Buf가 음수일 경우
+	if(Input_Data<0)		//iNumber가 음수일 경우
 	{
 		Input_Data *= -1;		//음수 X -1로 양수로 변환
 		cNumber_sign = '-';
@@ -165,7 +166,7 @@ void Number_convert(int Input_Data)		//숫자 변환 함수
 
 	for(int sel=0; sel<4; sel++)
 	{
-		if(sel<uiNumber_len)
+		if(sel<uiNumber_len && bSet_Flag == 0)
 		{
 			uiNumber_Data[sel] = 0xff000000;
 		}
