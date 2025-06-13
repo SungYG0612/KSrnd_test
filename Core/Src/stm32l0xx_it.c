@@ -44,6 +44,7 @@
 unsigned int uiFND_sel = 0;
 unsigned int uiPrev_Pin_value = 0;
 unsigned int uiKey_Time = 0;
+unsigned int uiBlink_Time;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -62,13 +63,12 @@ unsigned int uiKey_Time = 0;
 extern const unsigned int FND_Port_Table[4];
 extern int bButton_Flag;
 extern int bSet_Flag;
+extern int iNumber_Buf;
 extern int bBlink_Flag;
 extern int bLong_Key_Flag;
-extern int iNumber_Buf;
 extern unsigned int uiPin_value;
-extern unsigned int uiBlink_Time;
 extern unsigned int uiBlink_Port_Data[4];
-extern unsigned int uiDisplay_Number_Buf[4];
+extern unsigned int uiNumber_Display_Buf[4];
 extern unsigned int uiFND_Port_Buf[4];
 extern unsigned int uiLong_Key_Data;
 /* USER CODE END EV */
@@ -194,7 +194,6 @@ void SysTick_Handler(void)
 	/*연속 증감*/
 	if(bLong_Key_Flag)
 	{
-		/
 	}
 	//////////////////////////////////////////////////////
 	/*FND 출력 Begin*/
@@ -205,7 +204,7 @@ void SysTick_Handler(void)
 	case 2:
 	case 3:
 		GPIOB->BSRR = uiFND_Port_Buf[uiFND_sel];
-		GPIOE->BSRR = uiDisplay_Number_Buf[uiFND_sel];
+		GPIOE->BSRR = uiNumber_Display_Buf[uiFND_sel];
 		uiFND_sel++;
 		uiFND_sel %= 4;
 	}
