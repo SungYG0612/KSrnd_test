@@ -45,6 +45,7 @@ unsigned int uiFND_sel = 0;
 unsigned int uiPrev_Pin_value = 0;
 unsigned int uiKey_Time = 0;
 unsigned int uiBlink_Time;
+unsigned int uiBlink_Sel;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -155,28 +156,7 @@ void SysTick_Handler(void)
 	/*Button Input Interrupt End*/
 	//////////////////////////////////////////////////////
 	/*Button Short, Long Key Begin*/
-	if(uiKey_Time >= 1000)
-	{
-		bLong_Key_Flag = 1;
-		switch(uiPin_value)
-		{
-		case 0x4000:
-			uiLong_Key_Data = 1;
-			break;
-		case 0x2000:
 
-			break;
-		case 0x1000:
-			uiLong_Key_Data = 3;
-			break;
-		case 0x0800:
-
-			break;
-		case 0x0400:
-			uiLong_Key_Data = 5;
-			break;
-		}
-	}
 	/*Button Long Key End*/
 	//////////////////////////////////////////////////////
 	/*FND Blink Begin*/
@@ -189,12 +169,32 @@ void SysTick_Handler(void)
 		}
 		uiBlink_Time++;
 	}
+
+	if(bBlink_Flag)
+	{
+		switch(uiBlink_Sel)
+		{
+		case 0:
+			uiFND_Port_Buf[0] = uiBlink_Port_Data[0];
+			uiFND_Port_Buf[1] = uiBlink_Port_Data[1];
+			uiFND_Port_Buf[2] = uiBlink_Port_Data[2];
+			uiFND_Port_Buf[3] = uiBlink_Port_Data[3];
+			uiBlink_Sel = 1;
+			break;
+		case 1:
+			uiFND_Port_Buf[0] = FND_Port_Table[0];
+			uiFND_Port_Buf[1] = FND_Port_Table[1];
+			uiFND_Port_Buf[2] = FND_Port_Table[2];
+			uiFND_Port_Buf[3] = FND_Port_Table[3];
+			uiBlink_Sel = 0;
+			break;
+		}
+		bBlink_Flag = 0;
+	}
 	/*FND Blink End*/
 	//////////////////////////////////////////////////////
 	/*연속 증감*/
-	if(bLong_Key_Flag)
-	{
-	}
+
 	//////////////////////////////////////////////////////
 	/*FND 출력 Begin*/
 	switch(uiFND_sel)
