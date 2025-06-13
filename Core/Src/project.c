@@ -61,7 +61,7 @@ void project_main(void)
 				break;
 
 			case Set_Button:
-				bSet_Flag ^= 1;
+				bSet_Flag = 1;
 				break;
 
 			case Sel_Button:

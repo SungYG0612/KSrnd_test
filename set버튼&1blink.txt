@@ -1,8 +1,16 @@
 set버튼&1blink
 
 set누르면
-set_flag 토글
+set_flag ^=1 토글
 
 set_flag == 1이면		<= switch(set_flag) case 1:
 Leading Zero가 꺼지고	<= case 0: uiFND_Port_Buf[0~3] = FND_Port_Table;
-첫번째 FND만 깜빡임	<=
+첫번째 FND만 깜빡임	<= bBlink_Flag = 1;
+				blink_flag가 1일때
+				switch(bBlink_sel) 
+				case 0:
+					블링크하는 port
+					bblink_sel = 1
+				case 1:
+					일반 port
+					bblink_sel = 0

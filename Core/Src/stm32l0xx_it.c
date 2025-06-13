@@ -162,7 +162,7 @@ void SysTick_Handler(void)
 	/*FND Blink Begin*/
 	if(bSet_Flag)
 	{
-		if(uiBlink_Time >= 200)
+		if(uiBlink_Time >= 400)
 		{
 			bBlink_Flag = 1;
 			uiBlink_Time = 0;
