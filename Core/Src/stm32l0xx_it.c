@@ -43,7 +43,7 @@
 /* USER CODE BEGIN PV */
 unsigned int uiFND_sel = 0;
 unsigned int uiPrev_Pin_value = 0;
-unsigned int uiLong_Key_Time = 0;
+unsigned int uiKey_Time = 0;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -144,18 +144,22 @@ void SysTick_Handler(void)
 	if(uiPin_value)
 	{
 		if(!uiPrev_Pin_value){bButton_Flag = 1;}
-		else if(uiPrev_Pin_value == uiPin_value && uiLong_Key_Time<1000){uiLong_Key_Time ++;}
-		else if(uiPrev_Pin_value && uiPrev_Pin_value != uiPin_value){uiLong_Key_Time = 0;}
+		else if(uiPrev_Pin_value == uiPin_value && uiKey_Time<1000){uiKey_Time ++;}
+		else if(uiPrev_Pin_value && uiPrev_Pin_value != uiPin_value){uiKey_Time = 0;}
 	}
 	else
 	{
-		uiLong_Key_Time = 0;
+		uiKey_Time = 0;
 	}
 	uiPrev_Pin_value = uiPin_value;
 	/*Button Input Interrupt End*/
 	//////////////////////////////////////////////////////
-	/*Button Long Key Begin*/
-	if(uiLong_Key_Time >= 1000)
+	/*Button Short, Long Key Begin*/
+	if(uiKey_Time < 1000)
+	{
+
+	}
+	else if(uiKey_Time >= 1000)
 	{
 		bLong_Key_Flag = 1;
 		switch(uiPin_value)
@@ -186,6 +190,9 @@ void SysTick_Handler(void)
 		uiBlink_Time++;
 	}
 	/*FND Blink End*/
+	//////////////////////////////////////////////////////
+	/*연속 증감*/
+
 	//////////////////////////////////////////////////////
 	/*FND 출력 Begin*/
 	switch(uiFND_sel)
