@@ -46,6 +46,7 @@ unsigned int uiPrev_Pin_value = 0;
 unsigned int uiKey_Time = 0;
 unsigned int uiBlink_Time;
 unsigned int uiBlink_Sel;
+int bBlink_status = 0;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -62,16 +63,18 @@ unsigned int uiBlink_Sel;
 
 /* USER CODE BEGIN EV */
 extern const unsigned int FND_Port_Table[4];
-extern int bButton_Flag;
-extern int bSet_Flag;
-extern int iNumber_Buf;
-extern int bBlink_Flag;
-extern int bLong_Key_Flag;
 extern unsigned int uiPin_value;
 extern unsigned int uiBlink_Port_Data[4];
 extern unsigned int uiNumber_Display_Buf[4];
 extern unsigned int uiFND_Port_Buf[4];
 extern unsigned int uiLong_Key_Data;
+//////////////////////////////////////////////
+extern int bButton_Flag;
+extern int bSet_Flag;
+extern int iNumber_Buf;
+extern int bBlink_Flag;
+extern int bNo_Blink_Flag;
+extern int bLong_Key_Flag;
 /* USER CODE END EV */
 
 /******************************************************************************/
@@ -162,6 +165,23 @@ void SysTick_Handler(void)
 	/*FND Blink Begin*/
 	if(bSet_Flag)
 	{
+		bBlink_status ++;
+		bBlink_status %= 2;
+		switch(bBlink_status)
+		{
+		case 0:
+			bNo_Blink_Flag = 1;
+			bBlink_Flag = 0;
+			break;
+		case 1:
+			bBlink_Flag = 1;
+			break;
+		}
+		bSet_Flag = 0;
+	}
+
+	if(bBlink_Flag)
+	{
 		if(uiBlink_Time >= 400)
 		{
 			bBlink_Flag = 1;
@@ -170,27 +190,6 @@ void SysTick_Handler(void)
 		uiBlink_Time++;
 	}
 
-	if(bBlink_Flag)
-	{
-		switch(uiBlink_Sel)
-		{
-		case 0:
-			uiFND_Port_Buf[0] = uiBlink_Port_Data[0];
-			uiFND_Port_Buf[1] = uiBlink_Port_Data[1];
-			uiFND_Port_Buf[2] = uiBlink_Port_Data[2];
-			uiFND_Port_Buf[3] = uiBlink_Port_Data[3];
-			uiBlink_Sel = 1;
-			break;
-		case 1:
-			uiFND_Port_Buf[0] = FND_Port_Table[0];
-			uiFND_Port_Buf[1] = FND_Port_Table[1];
-			uiFND_Port_Buf[2] = FND_Port_Table[2];
-			uiFND_Port_Buf[3] = FND_Port_Table[3];
-			uiBlink_Sel = 0;
-			break;
-		}
-		bBlink_Flag = 0;
-	}
 	/*FND Blink End*/
 	//////////////////////////////////////////////////////
 	/*연속 증감*/

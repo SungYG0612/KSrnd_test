@@ -16,6 +16,7 @@ int bSet_Flag = 0;
 int bSel_Flag = 0;
 int iNumber_Buf = 0;
 int bBlink_Flag = 0;
+int bNo_Blink_Flag = 0;
 int bLong_Key_Flag = 0;
 
 unsigned int uiPin_value = 0;
@@ -78,6 +79,37 @@ void project_main(void)
 			}
 			Number_convert();
 			bButton_Flag = 0;
+		}
+
+		if(bNo_Blink_Flag)
+		{
+			uiFND_Port_Buf[0] = uiBlink_Port_Data[0];
+			uiFND_Port_Buf[1] = uiBlink_Port_Data[1];
+			uiFND_Port_Buf[2] = uiBlink_Port_Data[2];
+			uiFND_Port_Buf[3] = uiBlink_Port_Data[3];
+			bNo_Blink_Flag = 0;
+		}
+
+		if(bBlink_Flag)
+		{
+			switch(uiBlink_Sel)
+			{
+			case 0:
+				uiFND_Port_Buf[0] = uiBlink_Port_Data[0];
+				uiFND_Port_Buf[1] = uiBlink_Port_Data[1];
+				uiFND_Port_Buf[2] = uiBlink_Port_Data[2];
+				uiFND_Port_Buf[3] = uiBlink_Port_Data[3];
+				uiBlink_Sel = 1;
+				break;
+			case 1:
+				uiFND_Port_Buf[0] = FND_Port_Table[0];
+				uiFND_Port_Buf[1] = FND_Port_Table[1];
+				uiFND_Port_Buf[2] = FND_Port_Table[2];
+				uiFND_Port_Buf[3] = FND_Port_Table[3];
+				uiBlink_Sel = 0;
+				break;
+			}
+			bBlink_Flag = 0;
 		}
 	}
 }

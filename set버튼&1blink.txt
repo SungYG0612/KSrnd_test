@@ -14,3 +14,10 @@ Leading Zero가 꺼지고	<= case 0: uiFND_Port_Buf[0~3] = FND_Port_Table;
 				case 1:
 					일반 port
 					bblink_sel = 0
+
+폴링 : 
+숫자 계산
+
+인터럽트 :
+버튼 입력 
+FND 출력
