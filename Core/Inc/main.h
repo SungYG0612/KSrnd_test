@@ -97,7 +97,11 @@ void Error_Handler(void);
 #define BUZ_GPIO_Port GPIOD
 
 /* USER CODE BEGIN Private defines */
-
+#define Down_button 0x0400
+#define Set_button 0x0800
+#define Up_button 0x1000
+#define Sel_button 0x2000
+#define Reset_button 0x4000
 /* USER CODE END Private defines */
 
 #ifdef __cplusplus

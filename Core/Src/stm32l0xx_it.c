@@ -43,7 +43,6 @@
 /* USER CODE BEGIN PV */
 unsigned int uiSel = 0;
 unsigned int uiPrev_Pin_value = 0;
-unsigned int uiTime = 0;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -59,12 +58,14 @@ unsigned int uiTime = 0;
 /* External variables --------------------------------------------------------*/
 
 /* USER CODE BEGIN EV */
-extern const unsigned int FND_Port_Table[4];
 extern int bButton_Flag;
 extern int bSet_Flag;
 extern int bBlink_Flag;
+
+extern const unsigned int FND_Port_Table[4];
 extern unsigned int uiPin_value;
 extern unsigned int uiDisplay_Data[4];
+extern unsigned int uiTime;
 /* USER CODE END EV */
 
 /******************************************************************************/
@@ -150,8 +151,10 @@ void SysTick_Handler(void)
 		}
 		uiTime++;
 	}
-	else {bBlink_Flag = 0;}
-
+	else
+	{
+		bBlink_Flag = 0;
+	}
 	//////////////////////////////////////////////////////
 	/*FND 출력*/
 	GPIOB->BSRR = FND_Port_Table[uiSel];
