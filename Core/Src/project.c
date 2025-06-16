@@ -42,10 +42,52 @@ void project_main(void)
 			switch(uiPin_value)
 			{
 			case Up_button:
-				iNumber++;
+				if(bSet_Flag)
+				{
+					switch(uiBlink_Sel)
+					{
+					case 0:
+						if(iNumber>=9000) {iNumber-=9000;}
+						else {iNumber+=1000;}
+						break;
+					case 1:
+						if(iNumber%1000>=900) {iNumber-=900;}
+						else {iNumber+=100;}
+						break;
+					case 2:
+						if(iNumber%100>=90) {iNumber-=90;}
+						else {iNumber+=10;}
+						break;
+					case 3:
+						if(iNumber%10>=9) {iNumber-=9;}
+						else {iNumber+=1;}
+						break;
+					}
+				}
 				break;
 			case Down_button:
-				iNumber--;
+				if(bSet_Flag)
+				{
+					switch(uiBlink_Sel)
+					{
+					case 0:
+						if(iNumber<1000) {iNumber+=9000;}
+						else {iNumber-=1000;}
+						break;
+					case 1:
+						if(iNumber%1000<100) {iNumber+=900;}
+						else {iNumber-=100;}
+						break;
+					case 2:
+						if(iNumber%100<10) {iNumber+=90;}
+						else {iNumber-=10;}
+						break;
+					case 3:
+						if(iNumber%10==0) {iNumber+=9;}
+						else {iNumber-=1;}
+						break;
+					}
+				}
 				break;
 			case Set_button:
 				bBlink_Flag = 1;
@@ -53,8 +95,11 @@ void project_main(void)
 				bLeading_Zero_Flag ^= 1;
 				break;
 			case Sel_button:
-				uiBlink_Sel ++;
-				uiBlink_Sel %= 4;
+				if(bSet_Flag)
+				{
+					uiBlink_Sel ++;
+					uiBlink_Sel %= 4;
+				}
 				break;
 			case Reset_button:
 				iNumber=0;
