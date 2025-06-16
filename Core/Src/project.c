@@ -17,7 +17,6 @@ const unsigned int FND_Port_Table[4] = {0x70008000, 0xb0004000, 0xd0002000, 0xe0
 
 int iNumber_Data = 1234;
 unsigned int uiDisplay_Data[4] = {};
-unsigned int uiFND_Port_Buf[4] = {0x70008000, 0xb0004000, 0xd0002000, 0xe0001000};
 
 unsigned int uiPort_sel = 0;
 unsigned int uiPin_value = 0x0000;
@@ -41,7 +40,11 @@ void project_main(void)
 		if(bButton_Flag)
 		{
 			if(uiPin_value == 0x0400) {iNumber_Data--;}		//1번 버튼 = iNumber_Data 증가
-			if(uiPin_value == 0x0800) {bSet_Flag ^= 1;}		//2번 버튼 = Setting 버튼 > LED Blink
+			if(uiPin_value == 0x0800) //2번 버튼 = Setting 버튼 > LED Blink
+			{
+				bSet_Flag ^= 1;
+				bBlink_Flag = 1;
+			}
 			if(uiPin_value == 0x1000) {iNumber_Data++;}		//3번 버튼 = iNumber_Data 감소
 			if(uiPin_value == 0x2000) {bSel_Flag = 1;}
 			if(uiPin_value == 0x4000) {iNumber_Data=0;}		//5번 버튼 = iNumber_Data 0 초기화

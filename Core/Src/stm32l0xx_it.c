@@ -44,7 +44,6 @@
 unsigned int uiSel = 0;
 unsigned int uiPrev_Pin_value = 0;
 unsigned int uiTime = 0;
-unsigned int uiFND_Display_Buf[4] = {};
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -66,7 +65,6 @@ extern int bSet_Flag;
 extern int bBlink_Flag;
 extern unsigned int uiPin_value;
 extern unsigned int uiDisplay_Data[4];
-extern unsigned int uiFND_Port_Buf[4];
 /* USER CODE END EV */
 
 /******************************************************************************/
@@ -154,19 +152,17 @@ void SysTick_Handler(void)
 	}
 	else {bBlink_Flag = 0;}
 
-	uiFND_Port_Buf[uiSel] = FND_Port_Table[uiSel];
+	//////////////////////////////////////////////////////
+	/*FND 출력*/
+	GPIOB->BSRR = FND_Port_Table[uiSel];
 	if(bBlink_Flag)
 	{
-		uiFND_Display_Buf[uiSel] = 0xff000000;
+		GPIOE->BSRR = 0xff000000;
 	}
 	else
 	{
-		uiFND_Display_Buf[uiSel] = uiDisplay_Data[uiSel];
+		GPIOE->BSRR = uiDisplay_Data[uiSel];
 	}
-	//////////////////////////////////////////////////////
-	/*FND 출력*/
-	GPIOB->BSRR = uiFND_Port_Buf[uiSel];
-	GPIOE->BSRR = uiFND_Display_Buf[uiSel];
 	uiSel ++;
 	uiSel %= 4;
   /* USER CODE END SysTick_IRQn 0 */
