@@ -20,7 +20,7 @@ int iNumber = 1234;
 unsigned int uiDisplay_Data[4] = {};
 unsigned int uiTime = 0;
 unsigned int uiPin_value = 0x0000;
-char cNumber_sign;
+unsigned int uiBlink_Sel = 0;
 //////////////////////////////////
 void Initialize(void);
 void Number_convert(int,int);
@@ -39,16 +39,27 @@ void project_main(void)
 	{
 		if(bButton_Flag)
 		{
-			if(uiPin_value == Down_button && bSet_Flag) {iNumber--;}		//1번 버튼 = iNumber 증가
-			if(uiPin_value == Set_button) //2번 버튼 = Setting 버튼 > LED Blink
+			switch(uiPin_value)
 			{
+			case Up_button:
+				iNumber++;
+				break;
+			case Down_button:
+				iNumber--;
+				break;
+			case Set_button:
 				bBlink_Flag = 1;
 				bSet_Flag ^= 1;
 				bLeading_Zero_Flag ^= 1;
+				break;
+			case Sel_button:
+				uiBlink_Sel ++;
+				uiBlink_Sel %= 4;
+				break;
+			case Reset_button:
+				iNumber=0;
+				break;
 			}
-			if(uiPin_value == Up_button && bSet_Flag) {iNumber++;}		//3번 버튼 = iNumber 감소
-			if(uiPin_value == Sel_button && bSet_Flag) {bSel_Flag = 1;}
-			if(uiPin_value == Reset_button) {iNumber=0;}		//5번 버튼 = iNumber 0 초기화
 			if(iNumber>9999 || iNumber <0) {iNumber = 0;}
 			Number_convert(iNumber,bLeading_Zero_Flag);
 			bButton_Flag = 0;
@@ -59,7 +70,7 @@ void project_main(void)
 //////////////////////////////////
 void Initialize(void)
 {
-
+	bLeading_Zero_Flag = 1;
 }
 
 void Number_convert(int number, int Flag)	//숫자 => Digit bit 변환 함수

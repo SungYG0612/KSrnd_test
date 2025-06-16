@@ -66,6 +66,7 @@ extern const unsigned int FND_Port_Table[4];
 extern unsigned int uiPin_value;
 extern unsigned int uiDisplay_Data[4];
 extern unsigned int uiTime;
+extern unsigned int uiBlink_Sel;
 /* USER CODE END EV */
 
 /******************************************************************************/
@@ -158,7 +159,7 @@ void SysTick_Handler(void)
 	//////////////////////////////////////////////////////
 	/*FND 출력*/
 	GPIOB->BSRR = FND_Port_Table[uiSel];
-	if(bBlink_Flag)
+	if(bBlink_Flag && uiSel == uiBlink_Sel)
 	{
 		GPIOE->BSRR = 0xff000000;
 	}
