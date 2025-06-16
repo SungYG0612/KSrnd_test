@@ -49,10 +49,6 @@ void project_main(void)
 			Number_convert(iNumber_Data);
 			bButton_Flag = 0;
 		}
-		if(bSel_Flag)
-		{
-			uiPort_sel++;
-		}
 	}
 }
 
