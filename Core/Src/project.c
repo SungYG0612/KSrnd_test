@@ -90,13 +90,17 @@ void project_main(void)
 				}
 				break;
 			case Set_button:
+				uiTime = 0;
 				bBlink_Flag = 1;
+				uiBlink_Sel = 0;
 				bSet_Flag ^= 1;
 				bLeading_Zero_Flag ^= 1;
 				break;
 			case Sel_button:
 				if(bSet_Flag)
 				{
+					uiTime = 0;
+					bBlink_Flag = 1;
 					uiBlink_Sel ++;
 					uiBlink_Sel %= 4;
 				}
