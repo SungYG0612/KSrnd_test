@@ -41,7 +41,11 @@
 
 /* Private variables ---------------------------------------------------------*/
 /* USER CODE BEGIN PV */
+const unsigned int FND_Port_Table[4] = {0x70008000, 0xb0004000, 0xd0002000, 0xe0001000};
 
+unsigned int uiADC_Time = 0;
+unsigned int uiFND_Sel = 0;
+unsigned int uiADC_Buf_Sel = 0;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -55,9 +59,11 @@
 /* USER CODE END 0 */
 
 /* External variables --------------------------------------------------------*/
-
+extern ADC_HandleTypeDef hadc;
 /* USER CODE BEGIN EV */
-
+extern int bADC_Flag;
+extern unsigned int uiADC_Buf[16];
+extern unsigned int uiDisplay_Data[4];
 /* USER CODE END EV */
 
 /******************************************************************************/
@@ -125,7 +131,17 @@ void PendSV_Handler(void)
 void SysTick_Handler(void)
 {
   /* USER CODE BEGIN SysTick_IRQn 0 */
-
+	if(uiADC_Time >= 10)
+	{
+		HAL_ADC_Start_IT(&hadc);
+		uiADC_Time -= 10;
+	}
+	uiADC_Time ++;
+	//////////////////////////////////////////
+	GPIOB->BSRR = FND_Port_Table[uiFND_Sel];
+	GPIOE->BSRR = uiDisplay_Data[uiFND_Sel];
+	uiFND_Sel ++;
+	uiFND_Sel %= 4;
   /* USER CODE END SysTick_IRQn 0 */
   HAL_IncTick();
   /* USER CODE BEGIN SysTick_IRQn 1 */
@@ -139,6 +155,26 @@ void SysTick_Handler(void)
 /* For the available peripheral interrupt handler names,                      */
 /* please refer to the startup file (startup_stm32l0xx.s).                    */
 /******************************************************************************/
+
+/**
+  * @brief This function handles ADC, COMP1 and COMP2 interrupts (COMP interrupts through EXTI lines 21 and 22).
+  */
+void ADC1_COMP_IRQHandler(void)
+{
+  /* USER CODE BEGIN ADC1_COMP_IRQn 0 */
+	uiADC_Buf[uiADC_Buf_Sel]=HAL_ADC_GetValue(&hadc);
+	uiADC_Buf_Sel ++;
+	if(uiADC_Buf_Sel>=16)
+	{
+		bADC_Flag = 1;
+		uiADC_Buf_Sel = 0;
+	}
+  /* USER CODE END ADC1_COMP_IRQn 0 */
+  HAL_ADC_IRQHandler(&hadc);
+  /* USER CODE BEGIN ADC1_COMP_IRQn 1 */
+
+  /* USER CODE END ADC1_COMP_IRQn 1 */
+}
 
 /* USER CODE BEGIN 1 */
 
