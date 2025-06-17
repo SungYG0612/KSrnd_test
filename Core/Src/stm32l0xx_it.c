@@ -60,7 +60,7 @@ unsigned int uiKey_Time = 0;
 /* External variables --------------------------------------------------------*/
 
 /* USER CODE BEGIN EV */
-extern int bButton_Flag;
+extern int bShort_Button_Flag;
 extern int bLong_Button_Flag;
 extern int bSet_Flag;
 extern int bBlink_Flag;
@@ -142,12 +142,19 @@ void SysTick_Handler(void)
 	if(uiPin_value == uiPrev_Pin_value && uiPin_value)
 	{
 		uiKey_Time ++;
+		if(uiKey_Time==1000)
+		{
+			uiButton_Data = uiPrev_Pin_value;
+			bLong_Button_Flag = 1;
+		}
 	}
 	else if(uiPrev_Pin_value && uiPin_value ==0)
 	{
-		if(uiKey_Time < 500) {bButton_Flag = 1;}
-		else {bLong_Button_Flag = 1;}
-		uiButton_Data = uiPrev_Pin_value;
+		if(uiKey_Time < 1000)
+		{
+			uiButton_Data = uiPrev_Pin_value;
+			bShort_Button_Flag = 1;
+		}
 		uiKey_Time = 0;
 	}
 	uiPrev_Pin_value = uiPin_value;
