@@ -41,8 +41,10 @@
 
 /* Private variables ---------------------------------------------------------*/
 /* USER CODE BEGIN PV */
+unsigned int uiPin_value = 0;
 unsigned int uiSel = 0;
 unsigned int uiPrev_Pin_value = 0;
+unsigned int uiKey_Time = 0;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -59,13 +61,14 @@ unsigned int uiPrev_Pin_value = 0;
 
 /* USER CODE BEGIN EV */
 extern int bButton_Flag;
+extern int bLong_Button_Flag;
 extern int bSet_Flag;
 extern int bBlink_Flag;
 
 extern const unsigned int FND_Port_Table[4];
-extern unsigned int uiPin_value;
+extern unsigned int uiButton_Data;
 extern unsigned int uiDisplay_Data[4];
-extern unsigned int uiTime;
+extern unsigned int uiBlink_Time;
 extern unsigned int uiBlink_Sel;
 /* USER CODE END EV */
 
@@ -136,21 +139,28 @@ void SysTick_Handler(void)
   /* USER CODE BEGIN SysTick_IRQn 0 */
 	uiPin_value = GPIOD->IDR;
 	uiPin_value = (uiPin_value & 0x7c00) ^ 0x7c00;
-	if(uiPin_value && !uiPrev_Pin_value)
+	if(uiPin_value == uiPrev_Pin_value && uiPin_value)
 	{
-		bButton_Flag = 1;
+		uiKey_Time ++;
+	}
+	else if(uiPrev_Pin_value && uiPin_value ==0)
+	{
+		if(uiKey_Time < 500) {bButton_Flag = 1;}
+		else {bLong_Button_Flag = 1;}
+		uiButton_Data = uiPrev_Pin_value;
+		uiKey_Time = 0;
 	}
 	uiPrev_Pin_value = uiPin_value;
 	//////////////////////////////////////////////////////
 	/*FND Blink*/
 	if(bSet_Flag)
 	{
-		if(uiTime >= 500)
+		if(uiBlink_Time >= 500)
 		{
 			bBlink_Flag ^= 1;
-			uiTime = 0;
+			uiBlink_Time = 0;
 		}
-		uiTime++;
+		uiBlink_Time++;
 	}
 	else
 	{
