@@ -17,7 +17,7 @@ unsigned int uiADC_Buf[16] = {};
 //////////////////////////////////
 void Initialize(void);
 void Number_Convert(unsigned int,int);
-void T_Calculation(unsigned int);
+void T_Calculation(unsigned long int);
 
 //////////////////////////////////
 void project_initialization(void)
@@ -31,13 +31,13 @@ void project_main(void)
 	{
 		if(bADC_Flag)
 		{
-			unsigned int uiADC_Data = 0;
+			unsigned long int uliADC_Data = 0;
 			for(int num = 0;num < 16;num ++)
 			{
-				uiADC_Data += uiADC_Buf[num];
+				uliADC_Data += uiADC_Buf[num];
 			}
-			uiADC_Data /= 4;
-			T_Calculation(uiADC_Data);
+			uliADC_Data /= 4;
+			T_Calculation(uliADC_Data);
 			Number_Convert(iRPM_T, 0);
 			bADC_Flag = 0;
 		}
@@ -47,6 +47,7 @@ void project_main(void)
 //////////////////////////////////
 void Initialize(void)
 {
+	HAL_Delay(1000);
 	Number_Convert(0,0);
 }
 void Number_Convert(unsigned int number, int Flag)	//숫자 => Digit bit 변환 함수
@@ -77,7 +78,7 @@ void Number_Convert(unsigned int number, int Flag)	//숫자 => Digit bit 변환 
 	uiDisplay_Data[3] = FND_Number_Table[number%10];
 }
 
-void T_Calculation(unsigned int Input_Data)
+void T_Calculation(unsigned long int Input_Data)
 {
 	float fValue;
 
