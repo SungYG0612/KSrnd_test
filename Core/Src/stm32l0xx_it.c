@@ -164,7 +164,7 @@ void ADC1_COMP_IRQHandler(void)
   /* USER CODE BEGIN ADC1_COMP_IRQn 0 */
 	uiADC_Buf[uiADC_Buf_Sel]=HAL_ADC_GetValue(&hadc);
 	uiADC_Buf_Sel ++;
-	if(uiADC_Buf_Sel>=16)
+	if(uiADC_Buf_Sel >= 16)
 	{
 		bADC_Flag = 1;
 		uiADC_Buf_Sel = 0;
