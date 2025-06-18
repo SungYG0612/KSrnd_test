@@ -85,12 +85,12 @@ void Error_Handler(void);
 #define S4_GPIO_Port GPIOB
 #define PRT_Pin GPIO_PIN_10
 #define PRT_GPIO_Port GPIOD
-#define SET_Pin GPIO_PIN_11
-#define SET_GPIO_Port GPIOD
+#define SEL_Pin GPIO_PIN_11
+#define SEL_GPIO_Port GPIOD
 #define HOLD_Pin GPIO_PIN_12
 #define HOLD_GPIO_Port GPIOD
-#define SEL_Pin GPIO_PIN_13
-#define SEL_GPIO_Port GPIOD
+#define SELD13_Pin GPIO_PIN_13
+#define SELD13_GPIO_Port GPIOD
 #define DSP_Pin GPIO_PIN_14
 #define DSP_GPIO_Port GPIOD
 #define BUZ_Pin GPIO_PIN_15
