@@ -43,7 +43,12 @@
 UART_HandleTypeDef huart5;
 
 /* USER CODE BEGIN PV */
+uint8_t tx_buf[] = "\r\nHello World!!\r\n";
+uint8_t rx_buf[2];
+uint8_t tx_Len = 0;
 
+uint8_t rcvFlag = 0;
+uint8_t sndFlag = 0;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -92,16 +97,25 @@ int main(void)
   MX_USART5_UART_Init();
   /* USER CODE BEGIN 2 */
   project_initialization();
+  HAL_NVIC_EnableIRQ(USART4_5_IRQn);
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-	  project_main();
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
+	  if(sndFlag)
+	  {
+		  sndFlag = 0;
+	  }
+	  if(rcvFlag)
+	  {
+		  rcvFlag = 0;
+	  }
+	  HAL_UART_Receive_IT(&huart5, rx_buf, 1);
   }
   /* USER CODE END 3 */
 }
@@ -252,7 +266,17 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
-
+void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart)
+{
+	sndFlag = 1;
+	tx_Len = sizeof(tx_buf) -1;
+	HAL_UART_Transmit(&huart5, tx_buf, tx_Len, 0xFFFF);
+}
+void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
+{
+	rcvFlag = 1;
+	HAL_UART_Transmit_IT(&huart5, rx_buf, 1);
+}
 /* USER CODE END 4 */
 
 /**

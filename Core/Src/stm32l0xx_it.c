@@ -146,8 +146,7 @@ void SysTick_Handler(void)
 void USART4_5_IRQHandler(void)
 {
   /* USER CODE BEGIN USART4_5_IRQn 0 */
-	HAL_UART_Receive_IT(&huart5, &rx_data, 1);
-	HAL_UART_Transmit(&huart5, &rx_data, 1, 10);
+
   /* USER CODE END USART4_5_IRQn 0 */
   HAL_UART_IRQHandler(&huart5);
   /* USER CODE BEGIN USART4_5_IRQn 1 */
