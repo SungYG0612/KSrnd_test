@@ -15,6 +15,9 @@ int iRPM_T = 0;
 unsigned int uiDisplay_Data[4] = {};
 unsigned int uiADC_Buf[16] = {};
 //////////////////////////////////
+/*extern variable*/
+extern ADC_HandleTypeDef hadc;
+//////////////////////////////////
 void Initialize(void);
 void Number_Convert(unsigned int,int);
 void T_Calculation(unsigned long int);
@@ -47,8 +50,7 @@ void project_main(void)
 //////////////////////////////////
 void Initialize(void)
 {
-	HAL_Delay(1000);
-	Number_Convert(0,0);
+	HAL_ADCEx_Calibration_Start(&hadc,ADC_SINGLE_ENDED);
 }
 void Number_Convert(unsigned int number, int Flag)	//숫자 => Digit bit 변환 함수
 {
