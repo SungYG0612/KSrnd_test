@@ -43,9 +43,7 @@
 UART_HandleTypeDef huart5;
 
 /* USER CODE BEGIN PV */
-uint8_t str[] = "Hello World!\n\r";
-uint8_t received = '\0';
-HAL_StatusTypeDef rcvStat;
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -100,11 +98,6 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-	  rcvStat = HAL_UART_Receive(&huart5, &received, 1, 10);
-	  if(rcvStat == HAL_OK)
-	  {
-		  HAL_UART_Transmit(&huart5, &received, 1, 1000); //읽어드린 값 터미널로 출력
-	  }
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
