@@ -107,14 +107,6 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-	  if(sndFlag)
-	  {
-		  sndFlag = 0;
-	  }
-	  if(rcvFlag)
-	  {
-		  rcvFlag = 0;
-	  }
 	  HAL_UART_Receive_IT(&huart5, rx_buf, 1);
   }
   /* USER CODE END 3 */
@@ -268,13 +260,11 @@ static void MX_GPIO_Init(void)
 /* USER CODE BEGIN 4 */
 void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart)
 {
-	sndFlag = 1;
 	tx_Len = sizeof(tx_buf) -1;
 	HAL_UART_Transmit(&huart5, tx_buf, tx_Len, 0xFFFF);
 }
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 {
-	rcvFlag = 1;
 	HAL_UART_Transmit_IT(&huart5, rx_buf, 1);
 }
 /* USER CODE END 4 */
