@@ -49,20 +49,20 @@ void project_main(void)
 		{
 			if(ucReceive_Buf[1] == 'C' && ucReceive_Buf[2] == 'R')
 			{
-				ucTransmit_CR_Buf[4] = (uliADC_Data/1000)+'0';
-				ucTransmit_CR_Buf[5] = ((uliADC_Data%1000)/1000)+'0';
-				ucTransmit_CR_Buf[6] = ((uliADC_Data%100)/10)+'0';
-				ucTransmit_CR_Buf[8] = (uliADC_Data%10)+'0';
+				ucTransmit_CR_Buf[4] = (iRPM_T/1000)+'0';
+				ucTransmit_CR_Buf[5] = ((iRPM_T%1000)/1000)+'0';
+				ucTransmit_CR_Buf[6] = ((iRPM_T%100)/10)+'0';
+				ucTransmit_CR_Buf[8] = (iRPM_T%10)+'0';
 				USART5->TDR = ucTransmit_CR_Buf[0];
 				bCR_Flag = 1;
 				bTx_Flag = 0;
 			}
 			else if(ucReceive_Buf[1] == 'A' && ucReceive_Buf[2] == 'R')
 			{
-				ucTransmit_AR_Buf[4] = (iRPM_T/1000)+'0';
-				ucTransmit_AR_Buf[5] = ((iRPM_T%1000)/1000)+'0';
-				ucTransmit_AR_Buf[6] = ((iRPM_T%100)/10)+'0';
-				ucTransmit_AR_Buf[7] = (iRPM_T%10)+'0';
+				ucTransmit_AR_Buf[4] = (uliADC_Data/1000)+'0';
+				ucTransmit_AR_Buf[5] = ((uliADC_Data%1000)/1000)+'0';
+				ucTransmit_AR_Buf[6] = ((uliADC_Data%100)/10)+'0';
+				ucTransmit_AR_Buf[7] = (uliADC_Data%10)+'0';
 			}
 			bRx_Flag = 0;
 		}
