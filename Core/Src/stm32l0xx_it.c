@@ -137,7 +137,6 @@ void SysTick_Handler(void)
 		uiADC_Time -= 10;
 	}
 	uiADC_Time ++;
-
   /* USER CODE END SysTick_IRQn 0 */
   HAL_IncTick();
   /* USER CODE BEGIN SysTick_IRQn 1 */
