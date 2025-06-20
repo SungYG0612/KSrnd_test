@@ -58,6 +58,7 @@ void project_main(void)
 				ucTransmit_AR_Buf[6] = ((iRPM_T%100)/10)+'0';
 				ucTransmit_AR_Buf[7] = (iRPM_T%10)+'0';
 			}
+			bReceive_Flag = 0;
 		}
 	}
 }
