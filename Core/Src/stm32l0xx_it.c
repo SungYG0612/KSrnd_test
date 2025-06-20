@@ -212,9 +212,8 @@ void USART4_5_IRQHandler(void)
 			{
 				uiTx_Sel = 1;
 				bTx_Flag = 1;
-				return;
 			}
-			if(ucTransmit_Buf[uiTx_Sel] == '>')
+			else if(ucTransmit_Buf[uiTx_Sel] == '>')
 			{
 				USART5->TDR = ucTransmit_Buf[uiTx_Sel];
 				uiTx_Sel = 0;
