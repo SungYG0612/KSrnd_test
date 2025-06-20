@@ -206,11 +206,12 @@ void USART4_5_IRQHandler(void)
 	}
 	if(bTx_Flag == 0)
 	{
-		if(__HAL_UART_GET_FLAG(&huart5,UART_FLAG_TXE) == True)
+		if(__HAL_UART_GET_FLAG(&huart5,UART_FLAG_TC) == True)
 		{
 			if(uiTx_Sel == 0)
 			{
 				uiTx_Sel = 1;
+				USART5->ICR |= 0x0040;
 				bTx_Flag = 1;
 			}
 			else if(ucTransmit_Buf[uiTx_Sel] == '>')
