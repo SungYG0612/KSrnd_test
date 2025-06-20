@@ -41,8 +41,9 @@
 
 /* Private variables ---------------------------------------------------------*/
 /* USER CODE BEGIN PV */
-unsigned int uiSel = 0;
 unsigned int uiADC_Time = 0;
+unsigned int uiRx_Sel = 0;
+unsigned int uiTx_Sel = 1;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -60,8 +61,13 @@ extern ADC_HandleTypeDef hadc;
 extern UART_HandleTypeDef huart5;
 /* USER CODE BEGIN EV */
 extern int bADC_Flag;
-extern int bReceive_Flag;
+extern int bRx_Flag;
+extern int bTx_Flag;
+extern int bCR_Flag;
+extern int bAR_Flag;
 extern unsigned char ucReceive_Buf[];
+extern unsigned char ucTransmit_CR_Buf[11];
+extern unsigned char ucTransmit_AR_Buf[10];
 extern unsigned int uiADC_Buf[16];
 extern unsigned int uiADC_Buf_Sel;
 /* USER CODE END EV */
@@ -177,26 +183,54 @@ void ADC1_COMP_IRQHandler(void)
 void USART4_5_IRQHandler(void)
 {
   /* USER CODE BEGIN USART4_5_IRQn 0 */
-	if(__HAL_UART_GET_FLAG(&huart5,UART_FLAG_RXNE) != False)
+	if(!bRx_Flag)
 	{
-		unsigned char ucReceive_Data = USART5->RDR;
-		if(ucReceive_Data == '<')
+		if(__HAL_UART_GET_FLAG(&huart5,UART_FLAG_RXNE) == True)
 		{
-			ucReceive_Buf[0] = ucReceive_Data;
-			uiSel = 1;
+			unsigned char ucReceive_Data = USART5->RDR;
+			if(ucReceive_Data == '<')
+			{
+				ucReceive_Buf[0] = ucReceive_Data;
+				uiRx_Sel = 1;
+			}
+			else if(ucReceive_Data == '>' && ucReceive_Buf[0] == '<')
+			{
+				ucReceive_Buf[uiRx_Sel] = ucReceive_Data;
+				uiRx_Sel = 0;
+				bRx_Flag = 1;
+			}
+			else
+			{
+				ucReceive_Buf[uiRx_Sel] = ucReceive_Data;
+				uiRx_Sel ++;
+			}
+			return;
 		}
-		else if(ucReceive_Data == '>' && ucReceive_Buf[0] == '<')
+	}
+	if(!bTx_Flag)
+	{
+		if(__HAL_UART_GET_FLAG(&huart5,UART_FLAG_TXE) == True)
 		{
-			ucReceive_Buf[uiSel] = ucReceive_Data;
-			uiSel = 0;
-			bReceive_Flag = 1;
+			if(bCR_Flag)
+			{
+				if(uiTx_Sel >= 12)
+				{
+					uiTx_Sel = 1;
+					bCR_Flag = 0;
+					bTx_Flag = 1;
+				}
+				else
+				{
+					USART5->TDR = ucTransmit_CR_Buf[uiTx_Sel];
+					uiTx_Sel ++;
+				}
+			}
+			if(bAR_Flag)
+			{
+
+			}
+			return;
 		}
-		else
-		{
-			ucReceive_Buf[uiSel] = ucReceive_Data;
-			uiSel ++;
-		}
-		return;
 	}
   /* USER CODE END USART4_5_IRQn 0 */
   HAL_UART_IRQHandler(&huart5);

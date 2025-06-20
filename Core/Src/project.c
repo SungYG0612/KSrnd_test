@@ -6,7 +6,10 @@
 //////////////////////////////////
 /*variable*/
 int bADC_Flag = 0;
-int bReceive_Flag = 0;
+int bRx_Flag = 0;
+int bTx_Flag = 0;
+int bCR_Flag = 0;
+int bAR_Flag = 0;
 int iRPM_T = 0;
 unsigned long int uliADC_Data = 0;
 unsigned char ucReceive_Buf[] = {};
@@ -42,7 +45,7 @@ void project_main(void)
 			T_Calculation(uliADC_Data);
 			bADC_Flag = 0;
 		}
-		if(bReceive_Flag)
+		if(bRx_Flag)
 		{
 			if(ucReceive_Buf[1] == 'C' && ucReceive_Buf[2] == 'R')
 			{
@@ -50,6 +53,9 @@ void project_main(void)
 				ucTransmit_CR_Buf[5] = ((uliADC_Data%1000)/1000)+'0';
 				ucTransmit_CR_Buf[6] = ((uliADC_Data%100)/10)+'0';
 				ucTransmit_CR_Buf[8] = (uliADC_Data%10)+'0';
+				USART5->TDR = ucTransmit_CR_Buf[0];
+				bCR_Flag = 1;
+				bTx_Flag = 0;
 			}
 			else if(ucReceive_Buf[1] == 'A' && ucReceive_Buf[2] == 'R')
 			{
@@ -58,7 +64,7 @@ void project_main(void)
 				ucTransmit_AR_Buf[6] = ((iRPM_T%100)/10)+'0';
 				ucTransmit_AR_Buf[7] = (iRPM_T%10)+'0';
 			}
-			bReceive_Flag = 0;
+			bRx_Flag = 0;
 		}
 	}
 }
