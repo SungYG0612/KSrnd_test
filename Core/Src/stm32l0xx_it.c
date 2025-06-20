@@ -42,6 +42,7 @@
 /* Private variables ---------------------------------------------------------*/
 /* USER CODE BEGIN PV */
 unsigned int uiSel = 0;
+unsigned int uiADC_Time = 0;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -55,10 +56,14 @@ unsigned int uiSel = 0;
 /* USER CODE END 0 */
 
 /* External variables --------------------------------------------------------*/
+extern ADC_HandleTypeDef hadc;
 extern UART_HandleTypeDef huart5;
 /* USER CODE BEGIN EV */
+extern int bADC_Flag;
 extern int bReceive_Flag;
 extern unsigned char ucReceive_Buf[];
+extern unsigned int uiADC_Buf[16];
+extern unsigned int uiADC_Buf_Sel;
 /* USER CODE END EV */
 
 /******************************************************************************/
@@ -126,6 +131,12 @@ void PendSV_Handler(void)
 void SysTick_Handler(void)
 {
   /* USER CODE BEGIN SysTick_IRQn 0 */
+	if(uiADC_Time >= 10)
+	{
+		HAL_ADC_Start_IT(&hadc);
+		uiADC_Time -= 10;
+	}
+	uiADC_Time ++;
 
   /* USER CODE END SysTick_IRQn 0 */
   HAL_IncTick();
@@ -140,6 +151,26 @@ void SysTick_Handler(void)
 /* For the available peripheral interrupt handler names,                      */
 /* please refer to the startup file (startup_stm32l0xx.s).                    */
 /******************************************************************************/
+
+/**
+  * @brief This function handles ADC, COMP1 and COMP2 interrupts (COMP interrupts through EXTI lines 21 and 22).
+  */
+void ADC1_COMP_IRQHandler(void)
+{
+  /* USER CODE BEGIN ADC1_COMP_IRQn 0 */
+	uiADC_Buf[uiADC_Buf_Sel]=HAL_ADC_GetValue(&hadc);
+	uiADC_Buf_Sel ++;
+	if(uiADC_Buf_Sel >= 16)
+	{
+		bADC_Flag = 1;
+		uiADC_Buf_Sel = 0;
+	}
+  /* USER CODE END ADC1_COMP_IRQn 0 */
+  HAL_ADC_IRQHandler(&hadc);
+  /* USER CODE BEGIN ADC1_COMP_IRQn 1 */
+
+  /* USER CODE END ADC1_COMP_IRQn 1 */
+}
 
 /**
   * @brief This function handles USART4 and USART5 interrupt.
