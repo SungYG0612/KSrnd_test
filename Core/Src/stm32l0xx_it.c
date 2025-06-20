@@ -160,12 +160,16 @@ void SysTick_Handler(void)
 void ADC1_COMP_IRQHandler(void)
 {
   /* USER CODE BEGIN ADC1_COMP_IRQn 0 */
-	uiADC_Buf[uiADC_Buf_Sel]=HAL_ADC_GetValue(&hadc);
-	uiADC_Buf_Sel ++;
-	if(uiADC_Buf_Sel >= 16)
+	unsigned int uiData = HAL_ADC_GetValue(&hadc);
+	if(bADC_Flag == 0)
 	{
-		bADC_Flag = 1;
-		uiADC_Buf_Sel = 0;
+		uiADC_Buf[uiADC_Buf_Sel]=uiData;
+		uiADC_Buf_Sel ++;
+		if(uiADC_Buf_Sel >= 16)
+		{
+			bADC_Flag = 1;
+			uiADC_Buf_Sel = 0;
+		}
 	}
   /* USER CODE END ADC1_COMP_IRQn 0 */
   HAL_ADC_IRQHandler(&hadc);
@@ -211,7 +215,7 @@ void USART4_5_IRQHandler(void)
 			if(uiTx_Sel == 0)
 			{
 				uiTx_Sel = 1;
-				USART5->ICR |= 0x0040;
+				__HAL_UART_CLEAR_FLAG(&huart5,UART_CLEAR_TCF);
 				bTx_Flag = 1;
 			}
 			else if(ucTransmit_Buf[uiTx_Sel] == '>')
