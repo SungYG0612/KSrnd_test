@@ -41,7 +41,7 @@
 
 /* Private variables ---------------------------------------------------------*/
 /* USER CODE BEGIN PV */
-
+unsigned int uiSel = 0;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -57,7 +57,8 @@
 /* External variables --------------------------------------------------------*/
 extern UART_HandleTypeDef huart5;
 /* USER CODE BEGIN EV */
-extern uint8_t rx_data;
+extern int bReceive_Flag;
+extern unsigned char ucReceive_Buf[];
 /* USER CODE END EV */
 
 /******************************************************************************/
@@ -146,7 +147,26 @@ void SysTick_Handler(void)
 void USART4_5_IRQHandler(void)
 {
   /* USER CODE BEGIN USART4_5_IRQn 0 */
-
+	if(__HAL_UART_GET_FLAG(&huart5,UART_FLAG_RXNE) != False)
+	{
+		unsigned char ucReceive_Data = USART5->RDR;
+		if(ucReceive_Data == '<')
+		{
+			ucReceive_Buf[0] = ucReceive_Data;
+			uiSel = 1;
+		}
+		else if(ucReceive_Data == '>' && ucReceive_Buf[0] == '<')
+		{
+			ucReceive_Buf[uiSel] = ucReceive_Data;
+			uiSel = 0;
+			bReceive_Flag = 1;
+		}
+		else
+		{
+			ucReceive_Buf[uiSel] = ucReceive_Data;
+			uiSel ++;
+		}
+	}
   /* USER CODE END USART4_5_IRQn 0 */
   HAL_UART_IRQHandler(&huart5);
   /* USER CODE BEGIN USART4_5_IRQn 1 */

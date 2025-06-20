@@ -97,7 +97,8 @@ void Error_Handler(void);
 #define BUZ_GPIO_Port GPIOD
 
 /* USER CODE BEGIN Private defines */
-
+#define True 1
+#define False 0
 /* USER CODE END Private defines */
 
 #ifdef __cplusplus
