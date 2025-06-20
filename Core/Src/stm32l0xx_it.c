@@ -63,11 +63,8 @@ extern UART_HandleTypeDef huart5;
 extern int bADC_Flag;
 extern int bRx_Flag;
 extern int bTx_Flag;
-extern int bCR_Flag;
-extern int bAR_Flag;
 extern unsigned char ucReceive_Buf[];
-extern unsigned char ucTransmit_CR_Buf[11];
-extern unsigned char ucTransmit_AR_Buf[10];
+extern unsigned char ucTransmit_Buf[];
 extern unsigned int uiADC_Buf[16];
 extern unsigned int uiADC_Buf_Sel;
 /* USER CODE END EV */
@@ -183,7 +180,7 @@ void ADC1_COMP_IRQHandler(void)
 void USART4_5_IRQHandler(void)
 {
   /* USER CODE BEGIN USART4_5_IRQn 0 */
-	if(!bRx_Flag)
+	if(bRx_Flag == 0)
 	{
 		if(__HAL_UART_GET_FLAG(&huart5,UART_FLAG_RXNE) == True)
 		{
@@ -207,30 +204,28 @@ void USART4_5_IRQHandler(void)
 			return;
 		}
 	}
-	if(!bTx_Flag)
+	if(bTx_Flag == 0)
 	{
 		if(__HAL_UART_GET_FLAG(&huart5,UART_FLAG_TXE) == True)
 		{
-			if(bCR_Flag)
+			if(uiTx_Sel == 0)
 			{
-				if(uiTx_Sel >= 12)
-				{
-					uiTx_Sel = 1;
-					bCR_Flag = 0;
-					bTx_Flag = 1;
-				}
-				else
-				{
-					USART5->TDR = ucTransmit_CR_Buf[uiTx_Sel];
-					uiTx_Sel ++;
-				}
+				uiTx_Sel = 1;
+				bTx_Flag = 1;
+				return;
 			}
-			if(bAR_Flag)
+			if(ucTransmit_Buf[uiTx_Sel] == '>')
 			{
-
+				USART5->TDR = ucTransmit_Buf[uiTx_Sel];
+				uiTx_Sel = 0;
 			}
-			return;
+			else
+			{
+				USART5->TDR = ucTransmit_Buf[uiTx_Sel];
+				uiTx_Sel ++;
+			}
 		}
+		return;
 	}
   /* USER CODE END USART4_5_IRQn 0 */
   HAL_UART_IRQHandler(&huart5);

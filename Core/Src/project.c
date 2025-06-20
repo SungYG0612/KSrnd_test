@@ -8,13 +8,10 @@
 int bADC_Flag = 0;
 int bRx_Flag = 0;
 int bTx_Flag = 0;
-int bCR_Flag = 0;
-int bAR_Flag = 0;
 int iRPM_T = 0;
 unsigned long int uliADC_Data = 0;
 unsigned char ucReceive_Buf[] = {};
-unsigned char ucTransmit_CR_Buf[11] = {'<','C','R','/',0,0,0,'.',0,'/','>'};
-unsigned char ucTransmit_AR_Buf[10] = {'<','A','R','/',0,0,0,0,'/','>'};
+unsigned char ucTransmit_Buf[] = {'<',0,0,'/',0,0,0,0,'/','>'};
 unsigned int uiADC_Buf[16] = {};
 unsigned int uiADC_Buf_Sel = 0;
 
@@ -49,21 +46,31 @@ void project_main(void)
 		{
 			if(ucReceive_Buf[1] == 'C' && ucReceive_Buf[2] == 'R')
 			{
-				ucTransmit_CR_Buf[4] = (iRPM_T/1000)+'0';
-				ucTransmit_CR_Buf[5] = ((iRPM_T%1000)/1000)+'0';
-				ucTransmit_CR_Buf[6] = ((iRPM_T%100)/10)+'0';
-				ucTransmit_CR_Buf[8] = (iRPM_T%10)+'0';
-				USART5->TDR = ucTransmit_CR_Buf[0];
-				bCR_Flag = 1;
-				bTx_Flag = 0;
+				ucTransmit_Buf[1] = 'C';
+				ucTransmit_Buf[2] = 'R';
+				ucTransmit_Buf[4] = (iRPM_T/1000)+'0';
+				ucTransmit_Buf[5] = ((iRPM_T%1000)/1000)+'0';
+				ucTransmit_Buf[6] = ((iRPM_T%100)/10)+'0';
+				ucTransmit_Buf[7] = '0';
+				ucTransmit_Buf[8] = (iRPM_T%10)+'0';
+				ucTransmit_Buf[9] = '/';
+				ucTransmit_Buf[10] = '>';
+				USART5->TDR = ucTransmit_Buf[0];
+
 			}
 			else if(ucReceive_Buf[1] == 'A' && ucReceive_Buf[2] == 'R')
 			{
-				ucTransmit_AR_Buf[4] = (uliADC_Data/1000)+'0';
-				ucTransmit_AR_Buf[5] = ((uliADC_Data%1000)/1000)+'0';
-				ucTransmit_AR_Buf[6] = ((uliADC_Data%100)/10)+'0';
-				ucTransmit_AR_Buf[7] = (uliADC_Data%10)+'0';
+				ucTransmit_Buf[1] = 'A';
+				ucTransmit_Buf[2] = 'R';
+				ucTransmit_Buf[4] = (uliADC_Data/1000)+'0';
+				ucTransmit_Buf[5] = ((uliADC_Data%1000)/1000)+'0';
+				ucTransmit_Buf[6] = ((uliADC_Data%100)/10)+'0';
+				ucTransmit_Buf[7] = (uliADC_Data%10)+'0';
+				ucTransmit_Buf[8] = '/';
+				ucTransmit_Buf[9] = '>';
+				USART5->TDR = ucTransmit_Buf[0];
 			}
+			bTx_Flag = 0;
 			bRx_Flag = 0;
 		}
 	}
