@@ -166,6 +166,7 @@ void USART4_5_IRQHandler(void)
 			ucReceive_Buf[uiSel] = ucReceive_Data;
 			uiSel ++;
 		}
+		return;
 	}
   /* USER CODE END USART4_5_IRQn 0 */
   HAL_UART_IRQHandler(&huart5);

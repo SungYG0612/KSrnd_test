@@ -98,6 +98,7 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+	  project_main();
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
