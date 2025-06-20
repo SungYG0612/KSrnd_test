@@ -134,10 +134,10 @@ void PendSV_Handler(void)
 void SysTick_Handler(void)
 {
   /* USER CODE BEGIN SysTick_IRQn 0 */
-	if(uiADC_Time >= 10)
+	if(uiADC_Time >= 100)
 	{
 		HAL_ADC_Start_IT(&hadc);
-		uiADC_Time -= 10;
+		uiADC_Time -= 100;
 	}
 	uiADC_Time ++;
   /* USER CODE END SysTick_IRQn 0 */
