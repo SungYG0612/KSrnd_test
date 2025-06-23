@@ -17,6 +17,7 @@ unsigned int uiADC_Buf_Sel = 0;
 
 extern ADC_HandleTypeDef hadc;
 extern UART_HandleTypeDef huart5;
+extern TIM_HandleTypeDef htim2;
 //////////////////////////////////
 void Initialize(void);
 void T_Calculation(unsigned long int);
@@ -84,6 +85,8 @@ void Initialize(void)
 	HAL_Delay(500);
 	__HAL_UART_ENABLE_IT(&huart5,UART_IT_RXNE);
 	__HAL_UART_ENABLE_IT(&huart5,UART_IT_TC);
+	GPIOB->BSRR = 0x0800;
+	HAL_TIM_Base_Start_IT(&htim2);
 }
 
 void T_Calculation(unsigned long int Input_Data)

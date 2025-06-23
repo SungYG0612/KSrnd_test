@@ -44,6 +44,7 @@
 unsigned int uiADC_Time = 0;
 unsigned int uiRx_Sel = 0;
 unsigned int uiTx_Sel = 1;
+unsigned int uiLED_Sel = 0;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -245,7 +246,23 @@ void USART4_5_IRQHandler(void)
 void TIM2_IRQHandler(void)
 {
   /* USER CODE BEGIN TIM2_IRQn 0 */
-
+	switch(uiLED_Sel)
+	{
+	case 0:
+		GPIOE->BSRR = 0x20008900;
+		break;
+	case 1:
+		GPIOE->BSRR = 0x80002900;
+		break;
+	case 2:
+		GPIOE->BSRR = 0x0800a100;
+		break;
+	case 3:
+		GPIOE->BSRR = 0x0100a800;
+		break;
+	}
+	uiLED_Sel ++;
+	uiLED_Sel %= 4;
   /* USER CODE END TIM2_IRQn 0 */
   HAL_TIM_IRQHandler(&htim2);
   /* USER CODE BEGIN TIM2_IRQn 1 */
