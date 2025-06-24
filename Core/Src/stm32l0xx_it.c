@@ -41,10 +41,9 @@
 
 /* Private variables ---------------------------------------------------------*/
 /* USER CODE BEGIN PV */
-unsigned int uiADC_Time = 0;
+unsigned int uiADC_Sel = 0;
 unsigned int uiRx_Sel = 0;
 unsigned int uiTx_Sel = 1;
-unsigned int uiLED_Sel = 0;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -68,7 +67,12 @@ extern unsigned char ucReceive_Buf[];
 extern unsigned char ucTransmit_Buf[];
 extern unsigned int uiADC_Buf[16];
 extern unsigned int uiADC_Buf_Sel;
-extern unsigned int uiADC_DMA_Buf[5];
+extern unsigned int uiADC_DMA_Data[5];
+extern unsigned int uiIN10_Data[16];
+extern unsigned int uiIN11_Data[16];
+extern unsigned int uiIN12_Data[16];
+extern unsigned int uiIN13_Data[16];
+extern unsigned int uiIN14_Data[16];
 extern unsigned long int uliADC_Data[5];
 /* USER CODE END EV */
 
@@ -158,16 +162,19 @@ void SysTick_Handler(void)
 void DMA1_Channel1_IRQHandler(void)
 {
   /* USER CODE BEGIN DMA1_Channel1_IRQn 0 */
-	uliADC_Data[0] += uiADC_DMA_Buf[0];
-	uliADC_Data[1] += uiADC_DMA_Buf[1];
-	uliADC_Data[2] += uiADC_DMA_Buf[2];
-	uliADC_Data[3] += uiADC_DMA_Buf[3];
-	uliADC_Data[4] += uiADC_DMA_Buf[4];
-	uiADC_Time ++;
-	if(uiADC_Time >= 16)
+	if(bADC_Flag == 0)
 	{
-		bADC_Flag = 1;
-		uiADC_Time = 0;
+		uiIN10_Data[uiADC_Sel] = uiADC_DMA_Data[0];
+		uiIN11_Data[uiADC_Sel] = uiADC_DMA_Data[1];
+		uiIN12_Data[uiADC_Sel] = uiADC_DMA_Data[2];
+		uiIN13_Data[uiADC_Sel] = uiADC_DMA_Data[3];
+		uiIN14_Data[uiADC_Sel] = uiADC_DMA_Data[4];
+		uiADC_Sel ++;
+		if(uiADC_Sel >= 16)
+		{
+			bADC_Flag = 1;
+			uiADC_Sel = 0;
+		}
 	}
   /* USER CODE END DMA1_Channel1_IRQn 0 */
   HAL_DMA_IRQHandler(&hdma_adc);

@@ -14,7 +14,12 @@ unsigned char ucReceive_Buf[] = {};
 unsigned char ucTransmit_Buf[] = {'<',0,0,'/',0,0,0,0,'/','>'};
 unsigned int uiADC_Buf[16] = {};
 unsigned int uiADC_Buf_Sel = 0;
-unsigned int uiADC_DMA_Buf[5] = {};
+unsigned int uiADC_DMA_Data[5] = {};
+unsigned int uiIN10_Data[16];
+unsigned int uiIN11_Data[16];
+unsigned int uiIN12_Data[16];
+unsigned int uiIN13_Data[16];
+unsigned int uiIN14_Data[16];
 int iTemp_Value[5];
 
 extern ADC_HandleTypeDef hadc;
@@ -22,7 +27,7 @@ extern UART_HandleTypeDef huart5;
 extern TIM_HandleTypeDef htim6;
 //////////////////////////////////
 void Initialize(void);
-void T_Calculation(unsigned long int);
+int T_Calculation(unsigned long int);
 void Number_Convert(unsigned int,int);
 //////////////////////////////////
 void project_initialization(void)
@@ -36,10 +41,24 @@ void project_main(void)
 	{
 		if(bADC_Flag)
 		{
+			uliADC_Data[0] = 0;
+			uliADC_Data[1] = 0;
+			uliADC_Data[2] = 0;
+			uliADC_Data[3] = 0;
+			uliADC_Data[4] = 0;
+			for(int num=0; num<16; num++)
+			{
+				uliADC_Data[0] += uiIN10_Data[num];
+				uliADC_Data[1] += uiIN11_Data[num];
+				uliADC_Data[2] += uiIN12_Data[num];
+				uliADC_Data[3] += uiIN13_Data[num];
+				uliADC_Data[4] += uiIN14_Data[num];
+			}
 			iTemp_Value[0] = T_Calculation(uliADC_Data[0] /= 4);
-			T_Calculation(uliADC_Data[1] /= 4);
-			T_Calculation(uliADC_Data[2] /= 4);
-			T_Calculation(uliADC_Data[3] /= 4);
+			iTemp_Value[1] = T_Calculation(uliADC_Data[1] /= 4);
+			iTemp_Value[2] = T_Calculation(uliADC_Data[2] /= 4);
+			iTemp_Value[3] = T_Calculation(uliADC_Data[3] /= 4);
+			iTemp_Value[4] = T_Calculation(uliADC_Data[4] /= 4);
 			bADC_Flag = 0;
 		}
 		if(bRx_Flag)
@@ -85,11 +104,11 @@ void Initialize(void)
 	__HAL_UART_ENABLE_IT(&huart5,UART_IT_RXNE);
 	__HAL_UART_ENABLE_IT(&huart5,UART_IT_TC);
 	GPIOB->BSRR = 0x0800;
-	HAL_ADC_Start_DMA(&hadc, uiADC_DMA_Buf, 5);
+	HAL_ADC_Start_DMA(&hadc, uiADC_DMA_Data, 5);
 	HAL_TIM_Base_Start(&htim6);
 }
 
-void T_Calculation(unsigned long int Input_Data)
+int T_Calculation(unsigned long int Input_Data)
 {
 	float fValue;
 	int iRPM_T;
