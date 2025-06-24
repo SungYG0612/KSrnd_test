@@ -58,8 +58,8 @@ unsigned int uiLED_Sel = 0;
 /* USER CODE END 0 */
 
 /* External variables --------------------------------------------------------*/
-extern ADC_HandleTypeDef hadc;
-extern TIM_HandleTypeDef htim2;
+extern DMA_HandleTypeDef hdma_adc;
+extern TIM_HandleTypeDef htim6;
 extern UART_HandleTypeDef huart5;
 /* USER CODE BEGIN EV */
 extern int bADC_Flag;
@@ -157,27 +157,17 @@ void SysTick_Handler(void)
 /******************************************************************************/
 
 /**
-  * @brief This function handles ADC, COMP1 and COMP2 interrupts (COMP interrupts through EXTI lines 21 and 22).
+  * @brief This function handles DMA1 channel 1 interrupt.
   */
-void ADC1_COMP_IRQHandler(void)
+void DMA1_Channel1_IRQHandler(void)
 {
-  /* USER CODE BEGIN ADC1_COMP_IRQn 0 */
-	unsigned int uiData = HAL_ADC_GetValue(&hadc);
-	if(bADC_Flag == 0)
-	{
-		uiADC_Buf[uiADC_Buf_Sel]=uiData;
-		uiADC_Buf_Sel ++;
-		if(uiADC_Buf_Sel >= 16)
-		{
-			bADC_Flag = 1;
-			uiADC_Buf_Sel = 0;
-		}
-	}
-  /* USER CODE END ADC1_COMP_IRQn 0 */
-  HAL_ADC_IRQHandler(&hadc);
-  /* USER CODE BEGIN ADC1_COMP_IRQn 1 */
+  /* USER CODE BEGIN DMA1_Channel1_IRQn 0 */
 
-  /* USER CODE END ADC1_COMP_IRQn 1 */
+  /* USER CODE END DMA1_Channel1_IRQn 0 */
+  HAL_DMA_IRQHandler(&hdma_adc);
+  /* USER CODE BEGIN DMA1_Channel1_IRQn 1 */
+
+  /* USER CODE END DMA1_Channel1_IRQn 1 */
 }
 
 /**
@@ -241,33 +231,17 @@ void USART4_5_IRQHandler(void)
 }
 
 /**
-  * @brief This function handles TIM2 global interrupt.
+  * @brief This function handles TIM6 global interrupt and DAC1/DAC2 underrun error interrupts.
   */
-void TIM2_IRQHandler(void)
+void TIM6_DAC_IRQHandler(void)
 {
-  /* USER CODE BEGIN TIM2_IRQn 0 */
-	switch(uiLED_Sel)
-	{
-	case 0:
-		GPIOE->BSRR = 0x20008900;
-		break;
-	case 1:
-		GPIOE->BSRR = 0x80002900;
-		break;
-	case 2:
-		GPIOE->BSRR = 0x0800a100;
-		break;
-	case 3:
-		GPIOE->BSRR = 0x0100a800;
-		break;
-	}
-	uiLED_Sel ++;
-	uiLED_Sel %= 4;
-  /* USER CODE END TIM2_IRQn 0 */
-  HAL_TIM_IRQHandler(&htim2);
-  /* USER CODE BEGIN TIM2_IRQn 1 */
+  /* USER CODE BEGIN TIM6_DAC_IRQn 0 */
 
-  /* USER CODE END TIM2_IRQn 1 */
+  /* USER CODE END TIM6_DAC_IRQn 0 */
+  HAL_TIM_IRQHandler(&htim6);
+  /* USER CODE BEGIN TIM6_DAC_IRQn 1 */
+
+  /* USER CODE END TIM6_DAC_IRQn 1 */
 }
 
 /* USER CODE BEGIN 1 */

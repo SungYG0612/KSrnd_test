@@ -85,6 +85,7 @@ void Initialize(void)
 	HAL_Delay(500);
 	__HAL_UART_ENABLE_IT(&huart5,UART_IT_RXNE);
 	__HAL_UART_ENABLE_IT(&huart5,UART_IT_TC);
+	__HAL_ADC_ENABLE_IT(&hadc,ADC_IT_EOC);
 	GPIOB->BSRR = 0x0800;
 	HAL_TIM_Base_Start_IT(&htim2);
 }
