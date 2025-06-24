@@ -8,16 +8,18 @@
 int bADC_Flag = 0;
 int bRx_Flag = 0;
 int bTx_Flag = 0;
-int iRPM_T = 0;
-unsigned long int uliADC_Data = 0;
+
+unsigned long int uliADC_Data[5];
 unsigned char ucReceive_Buf[] = {};
 unsigned char ucTransmit_Buf[] = {'<',0,0,'/',0,0,0,0,'/','>'};
 unsigned int uiADC_Buf[16] = {};
 unsigned int uiADC_Buf_Sel = 0;
+unsigned int uiADC_DMA_Buf[5] = {};
+int iTemp_Value[5];
 
 extern ADC_HandleTypeDef hadc;
 extern UART_HandleTypeDef huart5;
-extern TIM_HandleTypeDef htim2;
+extern TIM_HandleTypeDef htim6;
 //////////////////////////////////
 void Initialize(void);
 void T_Calculation(unsigned long int);
@@ -34,13 +36,10 @@ void project_main(void)
 	{
 		if(bADC_Flag)
 		{
-			uliADC_Data = 0;
-			for(int num = 0;num < 16;num ++)
-			{
-				uliADC_Data += uiADC_Buf[num];
-			}
-			uliADC_Data /= 4;
-			T_Calculation(uliADC_Data);
+			iTemp_Value[0] = T_Calculation(uliADC_Data[0] /= 4);
+			T_Calculation(uliADC_Data[1] /= 4);
+			T_Calculation(uliADC_Data[2] /= 4);
+			T_Calculation(uliADC_Data[3] /= 4);
 			bADC_Flag = 0;
 		}
 		if(bRx_Flag)
@@ -85,15 +84,15 @@ void Initialize(void)
 	HAL_Delay(500);
 	__HAL_UART_ENABLE_IT(&huart5,UART_IT_RXNE);
 	__HAL_UART_ENABLE_IT(&huart5,UART_IT_TC);
-	__HAL_ADC_ENABLE_IT(&hadc,ADC_IT_EOC);
 	GPIOB->BSRR = 0x0800;
-	HAL_TIM_Base_Start_IT(&htim2);
+	HAL_ADC_Start_DMA(&hadc, uiADC_DMA_Buf, 5);
+	HAL_TIM_Base_Start(&htim6);
 }
 
 void T_Calculation(unsigned long int Input_Data)
 {
 	float fValue;
-
+	int iRPM_T;
 	// A/D ( 16384 ) :
 	// RPM Temp Calculation	( 10 k )
 	fValue = (float)Input_Data;
@@ -102,6 +101,7 @@ void T_Calculation(unsigned long int Input_Data)
 
 	if ( iRPM_T < 0 ) iRPM_T = 0;
 	if ( iRPM_T > 9999) iRPM_T = 9999;
+	return iRPM_T;
 }
 
 void Number_Convert(unsigned Number, int Flag)

@@ -59,7 +59,6 @@ unsigned int uiLED_Sel = 0;
 
 /* External variables --------------------------------------------------------*/
 extern DMA_HandleTypeDef hdma_adc;
-extern TIM_HandleTypeDef htim6;
 extern UART_HandleTypeDef huart5;
 /* USER CODE BEGIN EV */
 extern int bADC_Flag;
@@ -69,6 +68,8 @@ extern unsigned char ucReceive_Buf[];
 extern unsigned char ucTransmit_Buf[];
 extern unsigned int uiADC_Buf[16];
 extern unsigned int uiADC_Buf_Sel;
+extern unsigned int uiADC_DMA_Buf[5];
+extern unsigned long int uliADC_Data[5];
 /* USER CODE END EV */
 
 /******************************************************************************/
@@ -136,12 +137,7 @@ void PendSV_Handler(void)
 void SysTick_Handler(void)
 {
   /* USER CODE BEGIN SysTick_IRQn 0 */
-	if(uiADC_Time >= 100)
-	{
-		HAL_ADC_Start_IT(&hadc);
-		uiADC_Time -= 100;
-	}
-	uiADC_Time ++;
+
   /* USER CODE END SysTick_IRQn 0 */
   HAL_IncTick();
   /* USER CODE BEGIN SysTick_IRQn 1 */
@@ -162,7 +158,17 @@ void SysTick_Handler(void)
 void DMA1_Channel1_IRQHandler(void)
 {
   /* USER CODE BEGIN DMA1_Channel1_IRQn 0 */
-
+	uliADC_Data[0] += uiADC_DMA_Buf[0];
+	uliADC_Data[1] += uiADC_DMA_Buf[1];
+	uliADC_Data[2] += uiADC_DMA_Buf[2];
+	uliADC_Data[3] += uiADC_DMA_Buf[3];
+	uliADC_Data[4] += uiADC_DMA_Buf[4];
+	uiADC_Time ++;
+	if(uiADC_Time >= 16)
+	{
+		bADC_Flag = 1;
+		uiADC_Time = 0;
+	}
   /* USER CODE END DMA1_Channel1_IRQn 0 */
   HAL_DMA_IRQHandler(&hdma_adc);
   /* USER CODE BEGIN DMA1_Channel1_IRQn 1 */
@@ -228,20 +234,6 @@ void USART4_5_IRQHandler(void)
   /* USER CODE BEGIN USART4_5_IRQn 1 */
 
   /* USER CODE END USART4_5_IRQn 1 */
-}
-
-/**
-  * @brief This function handles TIM6 global interrupt and DAC1/DAC2 underrun error interrupts.
-  */
-void TIM6_DAC_IRQHandler(void)
-{
-  /* USER CODE BEGIN TIM6_DAC_IRQn 0 */
-
-  /* USER CODE END TIM6_DAC_IRQn 0 */
-  HAL_TIM_IRQHandler(&htim6);
-  /* USER CODE BEGIN TIM6_DAC_IRQn 1 */
-
-  /* USER CODE END TIM6_DAC_IRQn 1 */
 }
 
 /* USER CODE BEGIN 1 */
