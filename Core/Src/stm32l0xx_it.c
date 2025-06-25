@@ -213,10 +213,10 @@ void USART4_5_IRQHandler(void)
 	{
 		if(bTx_Flag == 0)
 		{
-			__HAL_UART_CLEAR_FLAG(&huart5,UART_CLEAR_TCF);
 			if(uiTx_Sel == 0)
 			{
 				uiTx_Sel = 1;
+				__HAL_UART_CLEAR_FLAG(&huart5,UART_CLEAR_TCF);
 				bTx_Flag = 1;
 			}
 			else if(ucTransmit_Buf[uiTx_Sel] == '>')
