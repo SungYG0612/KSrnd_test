@@ -162,13 +162,19 @@ void SysTick_Handler(void)
 void DMA1_Channel1_IRQHandler(void)
 {
   /* USER CODE BEGIN DMA1_Channel1_IRQn 0 */
+	unsigned int uiDMA_Data[5];
+	uiDMA_Data[0] = uiADC_DMA_Data[0];
+	uiDMA_Data[1] = uiADC_DMA_Data[1];
+	uiDMA_Data[2] = uiADC_DMA_Data[2];
+	uiDMA_Data[3] = uiADC_DMA_Data[3];
+	uiDMA_Data[4] = uiADC_DMA_Data[4];
 	if(bADC_Flag == 0)
 	{
-		uiIN10_Data[uiADC_Sel] = uiADC_DMA_Data[0];
-		uiIN11_Data[uiADC_Sel] = uiADC_DMA_Data[1];
-		uiIN12_Data[uiADC_Sel] = uiADC_DMA_Data[2];
-		uiIN13_Data[uiADC_Sel] = uiADC_DMA_Data[3];
-		uiIN14_Data[uiADC_Sel] = uiADC_DMA_Data[4];
+		uiIN10_Data[uiADC_Sel] = uiDMA_Data[0];
+		uiIN11_Data[uiADC_Sel] = uiDMA_Data[1];
+		uiIN12_Data[uiADC_Sel] = uiDMA_Data[2];
+		uiIN13_Data[uiADC_Sel] = uiDMA_Data[3];
+		uiIN14_Data[uiADC_Sel] = uiDMA_Data[4];
 		uiADC_Sel ++;
 		if(uiADC_Sel >= 16)
 		{
