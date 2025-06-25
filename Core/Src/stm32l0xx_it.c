@@ -185,11 +185,11 @@ void DMA1_Channel1_IRQHandler(void)
 void USART4_5_IRQHandler(void)
 {
   /* USER CODE BEGIN USART4_5_IRQn 0 */
-	if(bRx_Flag == 0)
+	if(__HAL_UART_GET_FLAG(&huart5,UART_FLAG_RXNE) == True)
 	{
-		if(__HAL_UART_GET_FLAG(&huart5,UART_FLAG_RXNE) == True)
+		unsigned char ucReceive_Data = USART5->RDR;
+		if(bRx_Flag == 0)
 		{
-			unsigned char ucReceive_Data = USART5->RDR;
 			if(ucReceive_Data == '<')
 			{
 				ucReceive_Buf[0] = ucReceive_Data;
@@ -206,17 +206,17 @@ void USART4_5_IRQHandler(void)
 				ucReceive_Buf[uiRx_Sel] = ucReceive_Data;
 				uiRx_Sel ++;
 			}
-			return;
 		}
+		return;
 	}
-	if(bTx_Flag == 0)
+	if(__HAL_UART_GET_FLAG(&huart5,UART_FLAG_TC) == True)
 	{
-		if(__HAL_UART_GET_FLAG(&huart5,UART_FLAG_TC) == True)
+		if(bTx_Flag == 0)
 		{
+			__HAL_UART_CLEAR_FLAG(&huart5,UART_CLEAR_TCF);
 			if(uiTx_Sel == 0)
 			{
 				uiTx_Sel = 1;
-				__HAL_UART_CLEAR_FLAG(&huart5,UART_CLEAR_TCF);
 				bTx_Flag = 1;
 			}
 			else if(ucTransmit_Buf[uiTx_Sel] == '>')
