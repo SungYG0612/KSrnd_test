@@ -9,7 +9,7 @@ int bADC_Flag = 0;
 int bRx_Flag = 0;
 int bTx_Flag = 0;
 
-unsigned long int uliADC_Data[5];
+unsigned int uiADC_Data[5];
 unsigned char ucReceive_Buf[] = {};
 unsigned char ucTransmit_Buf[] = {'<',0,0,'/',0,0,0,0,'/','>'};
 unsigned int uiADC_Buf[16] = {};
@@ -27,7 +27,7 @@ extern UART_HandleTypeDef huart5;
 extern TIM_HandleTypeDef htim6;
 //////////////////////////////////
 void Initialize(void);
-int T_Calculation(unsigned long int);
+int T_Calculation(unsigned int);
 void Number_Convert(unsigned int,int);
 //////////////////////////////////
 void project_initialization(void)
@@ -41,24 +41,26 @@ void project_main(void)
 	{
 		if(bADC_Flag)
 		{
-			uliADC_Data[0] = 0;
-			uliADC_Data[1] = 0;
-			uliADC_Data[2] = 0;
-			uliADC_Data[3] = 0;
-			uliADC_Data[4] = 0;
+			unsigned long int uliADC_Data_Buf[5];
 			for(int num=0; num<16; num++)
 			{
-				uliADC_Data[0] += uiIN10_Data[num];
-				uliADC_Data[1] += uiIN11_Data[num];
-				uliADC_Data[2] += uiIN12_Data[num];
-				uliADC_Data[3] += uiIN13_Data[num];
-				uliADC_Data[4] += uiIN14_Data[num];
+				uliADC_Data_Buf[0] += uiIN10_Data[num];
+				uliADC_Data_Buf[1] += uiIN11_Data[num];
+				uliADC_Data_Buf[2] += uiIN12_Data[num];
+				uliADC_Data_Buf[3] += uiIN13_Data[num];
+				uliADC_Data_Buf[4] += uiIN14_Data[num];
 			}
-			iTemp_Value[0] = T_Calculation(uliADC_Data[0] /= 4);
-			iTemp_Value[1] = T_Calculation(uliADC_Data[1] /= 4);
-			iTemp_Value[2] = T_Calculation(uliADC_Data[2] /= 4);
-			iTemp_Value[3] = T_Calculation(uliADC_Data[3] /= 4);
-			iTemp_Value[4] = T_Calculation(uliADC_Data[4] /= 4);
+			uiADC_Data[0] = uliADC_Data_Buf[0] / 4;
+			uiADC_Data[1] = uliADC_Data_Buf[1] / 4;
+			uiADC_Data[2] = uliADC_Data_Buf[2] / 4;
+			uiADC_Data[3] = uliADC_Data_Buf[3] / 4;
+			uiADC_Data[4] = uliADC_Data_Buf[4] / 4;
+
+			iTemp_Value[0] = T_Calculation(uiADC_Data[0]);
+			iTemp_Value[1] = T_Calculation(uiADC_Data[1]);
+			iTemp_Value[2] = T_Calculation(uiADC_Data[2]);
+			iTemp_Value[3] = T_Calculation(uiADC_Data[3]);
+			iTemp_Value[4] = T_Calculation(uiADC_Data[4]);
 			bADC_Flag = 0;
 		}
 		if(bRx_Flag)
@@ -67,13 +69,43 @@ void project_main(void)
 			{
 				ucTransmit_Buf[1] = 'C';
 				ucTransmit_Buf[2] = 'R';
-				ucTransmit_Buf[4] = (iRPM_T/1000)+'0';
-				ucTransmit_Buf[5] = ((iRPM_T%1000)/100)+'0';
-				ucTransmit_Buf[6] = ((iRPM_T%100)/10)+'0';
-				ucTransmit_Buf[7] = '.';
-				ucTransmit_Buf[8] = (iRPM_T%10)+'0';
-				ucTransmit_Buf[9] = '/';
-				ucTransmit_Buf[10] = '>';
+				ucTransmit_Buf[4] = '(';
+				ucTransmit_Buf[5] = (iTemp_Value[0]/1000)+'0';
+				ucTransmit_Buf[6] = ((iTemp_Value[0]%1000)/100)+'0';
+				ucTransmit_Buf[7] = ((iTemp_Value[0]%100)/10)+'0';
+				ucTransmit_Buf[8] = '.';
+				ucTransmit_Buf[9] = (iTemp_Value[0]%10)+'0';
+				ucTransmit_Buf[10] = ')';
+				ucTransmit_Buf[11] = '(';
+				ucTransmit_Buf[12] = (iTemp_Value[1]/1000)+'0';
+				ucTransmit_Buf[13] = ((iTemp_Value[1]%1000)/100)+'0';
+				ucTransmit_Buf[14] = ((iTemp_Value[1]%100)/10)+'0';
+				ucTransmit_Buf[15] = '.';
+				ucTransmit_Buf[16] = (iTemp_Value[1]%10)+'0';
+				ucTransmit_Buf[17] = ')';
+				ucTransmit_Buf[18] = '(';
+				ucTransmit_Buf[19] = (iTemp_Value[2]/1000)+'0';
+				ucTransmit_Buf[20] = ((iTemp_Value[2]%1000)/100)+'0';
+				ucTransmit_Buf[21] = ((iTemp_Value[2]%100)/10)+'0';
+				ucTransmit_Buf[22] = '.';
+				ucTransmit_Buf[23] = (iTemp_Value[2]%10)+'0';
+				ucTransmit_Buf[24] = ')';
+				ucTransmit_Buf[25] = '(';
+				ucTransmit_Buf[26] = (iTemp_Value[3]/1000)+'0';
+				ucTransmit_Buf[27] = ((iTemp_Value[3]%1000)/100)+'0';
+				ucTransmit_Buf[28] = ((iTemp_Value[3]%100)/10)+'0';
+				ucTransmit_Buf[29] = '.';
+				ucTransmit_Buf[30] = (iTemp_Value[3]%10)+'0';
+				ucTransmit_Buf[31] = ')';
+				ucTransmit_Buf[32] = '(';
+				ucTransmit_Buf[33] = (iTemp_Value[4]/1000)+'0';
+				ucTransmit_Buf[34] = ((iTemp_Value[4]%1000)/100)+'0';
+				ucTransmit_Buf[35] = ((iTemp_Value[4]%100)/10)+'0';
+				ucTransmit_Buf[36] = '.';
+				ucTransmit_Buf[37] = (iTemp_Value[4]%10)+'0';
+				ucTransmit_Buf[38] = ')';
+				ucTransmit_Buf[39] = '/';
+				ucTransmit_Buf[40] = '>';
 				USART5->TDR = '<';
 
 			}
@@ -81,12 +113,38 @@ void project_main(void)
 			{
 				ucTransmit_Buf[1] = 'A';
 				ucTransmit_Buf[2] = 'R';
-				ucTransmit_Buf[4] = (uliADC_Data/1000)+'0';
-				ucTransmit_Buf[5] = ((uliADC_Data%1000)/1000)+'0';
-				ucTransmit_Buf[6] = ((uliADC_Data%100)/10)+'0';
-				ucTransmit_Buf[7] = (uliADC_Data%10)+'0';
-				ucTransmit_Buf[8] = '/';
-				ucTransmit_Buf[9] = '>';
+				ucTransmit_Buf[4] = '(';
+				ucTransmit_Buf[5] = (uiADC_Data[0]/1000)+'0';
+				ucTransmit_Buf[6] = ((uiADC_Data[0]%1000)/100)+'0';
+				ucTransmit_Buf[7] = ((uiADC_Data[0]%100)/10)+'0';
+				ucTransmit_Buf[8] = (uiADC_Data[0]%10)+'0';
+				ucTransmit_Buf[9] = ')';
+				ucTransmit_Buf[10] = '(';
+				ucTransmit_Buf[11] = (uiADC_Data[1]/1000)+'0';
+				ucTransmit_Buf[12] = ((uiADC_Data[1]%1000)/100)+'0';
+				ucTransmit_Buf[13] = ((uiADC_Data[1]%100)/10)+'0';
+				ucTransmit_Buf[14] = (uiADC_Data[1]%10)+'0';
+				ucTransmit_Buf[15] = ')';
+				ucTransmit_Buf[16] = '(';
+				ucTransmit_Buf[17] = (uiADC_Data[2]/1000)+'0';
+				ucTransmit_Buf[18] = ((uiADC_Data[2]%1000)/100)+'0';
+				ucTransmit_Buf[19] = ((uiADC_Data[2]%100)/10)+'0';
+				ucTransmit_Buf[20] = (uiADC_Data[2]%10)+'0';
+				ucTransmit_Buf[21] = ')';
+				ucTransmit_Buf[22] = '(';
+				ucTransmit_Buf[23] = (uiADC_Data[3]/1000)+'0';
+				ucTransmit_Buf[24] = ((uiADC_Data[3]%1000)/100)+'0';
+				ucTransmit_Buf[25] = ((uiADC_Data[3]%100)/10)+'0';
+				ucTransmit_Buf[26] = (uiADC_Data[3]%10)+'0';
+				ucTransmit_Buf[27] = ')';
+				ucTransmit_Buf[28] = '(';
+				ucTransmit_Buf[29] = (uiADC_Data[4]/1000)+'0';
+				ucTransmit_Buf[30] = ((uiADC_Data[4]%1000)/100)+'0';
+				ucTransmit_Buf[31] = ((uiADC_Data[4]%100)/10)+'0';
+				ucTransmit_Buf[32] = (uiADC_Data[4]%10)+'0';
+				ucTransmit_Buf[33] = ')';
+				ucTransmit_Buf[34] = '/';
+				ucTransmit_Buf[35] = '>';
 				USART5->TDR = '<';
 			}
 			bTx_Flag = 0;
@@ -108,7 +166,7 @@ void Initialize(void)
 	HAL_TIM_Base_Start(&htim6);
 }
 
-int T_Calculation(unsigned long int Input_Data)
+int T_Calculation(unsigned int Input_Data)
 {
 	float fValue;
 	int iRPM_T;
