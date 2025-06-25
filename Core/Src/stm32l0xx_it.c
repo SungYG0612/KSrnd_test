@@ -68,11 +68,7 @@ extern unsigned char ucTransmit_Buf[];
 extern unsigned int uiADC_Buf[16];
 extern unsigned int uiADC_Buf_Sel;
 extern unsigned int uiADC_DMA_Data[5];
-extern unsigned int uiIN10_Data[16];
-extern unsigned int uiIN11_Data[16];
-extern unsigned int uiIN12_Data[16];
-extern unsigned int uiIN13_Data[16];
-extern unsigned int uiIN14_Data[16];
+extern unsigned int uiIN_Data[5][16];
 extern unsigned long int uliADC_Data[5];
 /* USER CODE END EV */
 
@@ -162,19 +158,13 @@ void SysTick_Handler(void)
 void DMA1_Channel1_IRQHandler(void)
 {
   /* USER CODE BEGIN DMA1_Channel1_IRQn 0 */
-	unsigned int uiDMA_Data[5];
-	uiDMA_Data[0] = uiADC_DMA_Data[0];
-	uiDMA_Data[1] = uiADC_DMA_Data[1];
-	uiDMA_Data[2] = uiADC_DMA_Data[2];
-	uiDMA_Data[3] = uiADC_DMA_Data[3];
-	uiDMA_Data[4] = uiADC_DMA_Data[4];
 	if(bADC_Flag == 0)
 	{
-		uiIN10_Data[uiADC_Sel] = uiDMA_Data[0];
-		uiIN11_Data[uiADC_Sel] = uiDMA_Data[1];
-		uiIN12_Data[uiADC_Sel] = uiDMA_Data[2];
-		uiIN13_Data[uiADC_Sel] = uiDMA_Data[3];
-		uiIN14_Data[uiADC_Sel] = uiDMA_Data[4];
+		uiIN_Data[0][uiADC_Sel] = uiADC_DMA_Data[0];
+		uiIN_Data[1][uiADC_Sel] = uiADC_DMA_Data[1];
+		uiIN_Data[2][uiADC_Sel] = uiADC_DMA_Data[2];
+		uiIN_Data[3][uiADC_Sel] = uiADC_DMA_Data[3];
+		uiIN_Data[4][uiADC_Sel] = uiADC_DMA_Data[4];
 		uiADC_Sel ++;
 		if(uiADC_Sel >= 16)
 		{

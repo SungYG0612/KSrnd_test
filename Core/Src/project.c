@@ -15,11 +15,7 @@ unsigned char ucTransmit_Buf[] = {'<',0,0,'/',0,0,0,0,'/','>'};
 unsigned int uiADC_Buf[16] = {};
 unsigned int uiADC_Buf_Sel = 0;
 unsigned int uiADC_DMA_Data[5] = {};
-unsigned int uiIN10_Data[16];
-unsigned int uiIN11_Data[16];
-unsigned int uiIN12_Data[16];
-unsigned int uiIN13_Data[16];
-unsigned int uiIN14_Data[16];
+unsigned int uiIN_Data[5][16];
 int iTemp_Value[5];
 
 extern ADC_HandleTypeDef hadc;
@@ -44,11 +40,11 @@ void project_main(void)
 			unsigned long int uliADC_Data_Buf[5];
 			for(int num=0; num<16; num++)
 			{
-				uliADC_Data_Buf[0] += uiIN10_Data[num];
-				uliADC_Data_Buf[1] += uiIN11_Data[num];
-				uliADC_Data_Buf[2] += uiIN12_Data[num];
-				uliADC_Data_Buf[3] += uiIN13_Data[num];
-				uliADC_Data_Buf[4] += uiIN14_Data[num];
+				uliADC_Data_Buf[0] += uiIN_Data[0][num];
+				uliADC_Data_Buf[1] += uiIN_Data[1][num];
+				uliADC_Data_Buf[2] += uiIN_Data[2][num];
+				uliADC_Data_Buf[3] += uiIN_Data[3][num];
+				uliADC_Data_Buf[4] += uiIN_Data[4][num];
 			}
 			uiADC_Data[0] = uliADC_Data_Buf[0] / 4;
 			uiADC_Data[1] = uliADC_Data_Buf[1] / 4;
